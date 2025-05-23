@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ColapsAndo: Exhibición-Festival de Arte-Ciencia</title>
+  <style>
+    body { font-family: sans-serif; margin: 2em; line-height: 1.6; }
+    h1, h2, h3 { color: #222; }
+    form { margin-top: 2em; }
+    input, textarea, select { display: block; margin-top: 0.5em; margin-bottom: 1em; width: 100%; max-width: 600px; padding: 0.5em; }
+    button { padding: 0.7em 1.5em; background-color: #333; color: white; border: none; cursor: pointer; }
+    iframe { width: 100%; height: 600px; border: 1px solid #ccc; margin-top: 2em; }
+  </style>
+</head>
+<body>
+
+<h1>ColapsAndo</h1>
+<h2>Exhibición-Festival de Arte-Ciencia Compleja</h2>
+<p>Del 1 al 10 de octubre de 2025, Ciudad de México</p>
+
+<h2>Convocatoria Abierta</h2>
+<p>Invitamos a artistas, científicxs, tecnólogxs, hackers y colectivos a participar con piezas que exploren los cruces entre el arte y la ciencia compleja. Aceptamos propuestas en tres categorías:</p>
+<ul>
+  <li><strong>Individual:</strong> una sola persona autora.</li>
+  <li><strong>Equipo pequeño:</strong> hasta 4 integrantes.</li>
+  <li><strong>Colectiva:</strong> más de 4 integrantes o colectivos formales.</li>
+</ul>
+
+<h3>Requisitos</h3>
+<ul>
+  <li>Descripción de la obra o propuesta (máx. 800 palabras).</li>
+  <li>Imágenes o bocetos (opcional, hasta 3).</li>
+  <li>Necesidades técnicas o espaciales.</li>
+  <li>Indicar si es una obra ya realizada o una comisión.</li>
+</ul>
+
+<h2>Formulario de Inscripción</h2>
+<form id="inscripcion">
+  <label>Nombre completo o colectivo:
+    <input type="text" name="nombre" required>
+  </label>
+  <label>Email de contacto:
+    <input type="email" name="email" required>
+  </label>
+  <label>Categoría:
+    <select name="categoria" required>
+      <option value="individual">Individual</option>
+      <option value="equipo">Equipo pequeño</option>
+      <option value="colectiva">Colectiva</option>
+    </select>
+  </label>
+  <label>Título de la obra:
+    <input type="text" name="titulo" required>
+  </label>
+  <label>Descripción de la obra o propuesta:
+    <textarea name="descripcion" rows="6" required></textarea>
+  </label>
+  <label>Necesidades técnicas o espaciales:
+    <textarea name="tecnica" rows="4"></textarea>
+  </label>
+  <button type="submit">Enviar propuesta</button>
+</form>
+
+<div id="mensaje"></div>
+
+<script>
+  document.getElementById('inscripcion').addEventListener('submit', function(e) {
+    e.preventDefault();
+    document.getElementById('mensaje').innerText = 'Gracias por tu envío. Hemos recibido tu propuesta.';
+    this.reset();
+  });
+</script>
+
+<h2>Plan de Trabajo</h2>
+<ul>
+  <li><strong>Junio 1-15:</strong> Planeación general (Coordinación)</li>
+  <li><strong>Junio 5-20:</strong> Redacción de convocatoria (Curaduría)</li>
+  <li><strong>Junio 10-25:</strong> Desarrollo web (Desarrollo)</li>
+  <li><strong>Junio 21:</strong> Publicación de convocatoria (Comunicación)</li>
+  <li><strong>Junio 21 - Julio 21:</strong> Recepción de propuestas (Curaduría)</li>
+  <li><strong>Julio 22 - Agosto 1:</strong> Selección de piezas (Curaduría)</li>
+  <li><strong>Agosto 2 - Septiembre 15:</strong> Comisión de obra (Producción)</li>
+  <li><strong>Septiembre 25-30:</strong> Montaje de la exhibición (Producción)</li>
+  <li><strong>Octubre 1-10:</strong> Festival (Todos)</li>
+  <li><strong>Octubre 11-13:</strong> Desmontaje y cierre (Producción)</li>
+</ul>
+
+<h2>Diagrama de Gantt</h2>
+<p>Consulta el cronograma interactivo:</p>
+<iframe src="colapsando_gantt.html"></iframe>
+
+</body>
+</html>
