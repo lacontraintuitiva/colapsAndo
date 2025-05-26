@@ -55,13 +55,31 @@ body {
 /* Fondo gris muy tenue para todos los campos de formulario */
 .form-control {
     background-color: #f7f7f9 !important;
-    border: 1px solid #e9ecef;
-    font-weight: 100;
+    border: 1px solid #e9ecef !important;
+    font-weight: 100 !important;
     letter-spacing: 0.2px;
+    box-shadow: none !important;
+    margin-bottom: 15px !important;
 }
+
+/* Elimina la sombra azul de Bootstrap al enfocar */
 .form-control:focus {
     background-color: #f7f7f9 !important;
-    border-color: #8da08f;
-    box-shadow: 0 0 0 0.1rem rgba(141, 160, 143, 0.1);
+    border-color: #8da08f !important;
+    box-shadow: 0 0 0 0.1rem rgba(141, 160, 143, 0.1) !important;
+    outline: none !important;
+}
+
+/* Títulos de los formularios */
+.card-header h4, .card-header h3 {
+    font-weight: 200 !important;
+    letter-spacing: 0.8px;
+    color: #2c3e50;
+    margin-bottom: 0;
+}
+
+/* Si usas <div class="mb-3"> puedes reducir o quitar el margin-bottom de esa clase si lo deseas */
+.mb-3 {
+    margin-bottom: 0 !important;
 }
 
