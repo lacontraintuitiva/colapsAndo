@@ -12,7 +12,6 @@ def login():
         password = request.form['password']
         conn = sqlite3.connect('database.db')
         c = conn.cursor()
-        # Agregar 'name' al SELECT
         c.execute(
             "SELECT id, password, role, name FROM users WHERE email = ?", (email,))
         user = c.fetchone()
@@ -20,7 +19,7 @@ def login():
         if user and check_password_hash(user[1], password):
             session['user_id'] = user[0]
             session['role'] = user[2]
-            session['user_name'] = user[3]  # Ahora sí existe user[3]
+            session['user_name'] = user[3]  # Incluir nombre
             flash('Inicio de sesión exitoso.', 'success')
             return redirect(url_for('admin.admin_panel'))
         else:
