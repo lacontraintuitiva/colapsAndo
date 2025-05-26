@@ -7,6 +7,7 @@
             <div class="card shadow-sm">
                 <div class="card-header text-center" style="background-color: #ffffff; color: #2c3e50; border: none;">
                     <h4 style="font-weight: 200; letter-spacing: 0.8px;">Iniciar Sesión</h4>
+                    <small style="color: #8c8c8c;">Site Key: {{ recaptcha_site_key[:20] if recaptcha_site_key else 'No configurado' }}...</small>
                 </div>
                 <div class="card-body">
                     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -32,7 +33,6 @@
                             <input type="password" class="form-control" name="password" required
                                    style="border: 1px solid #e9ecef; background-color: #ffffff; font-weight: 100; letter-spacing: 0.2px;">
                         </div>
-                        <!-- Campo oculto para el token de reCAPTCHA -->
                         <input type="hidden" name="recaptcha_token" id="recaptcha_token">
                         
                         <button type="button" class="btn btn-lg w-100" id="loginBtn"
@@ -41,44 +41,37 @@
                         </button>
                     </form>
                 </div>
-                
-                <div class="card-footer text-center" style="background-color: #ffffff; border-top: 1px solid #e9ecef;">
-                    <small style="color: #6c757d; font-weight: 100;">
-                        ¿No tienes cuenta? 
-                        <a href="{{ url_for('register.register') }}" class="text-decoration-none" 
-                           style="color: #7c8798; font-weight: 200;">
-                            Regístrate aquí
-                        </a>.
-                    </small>
-                </div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
+console.log('Site Key:', '{{ recaptcha_site_key }}');
+
 document.getElementById('loginBtn').addEventListener('click', function(e) {
     e.preventDefault();
     
-    // Verificar que reCAPTCHA esté cargado
+    console.log('Botón clickeado');
+    console.log('grecaptcha disponible:', typeof grecaptcha !== 'undefined');
+    
     if (typeof grecaptcha === 'undefined') {
         console.error('reCAPTCHA no está cargado');
-        document.getElementById('loginForm').submit();
+        alert('Error: reCAPTCHA no está cargado');
         return;
     }
     
-    // Ejecutar reCAPTCHA
     grecaptcha.ready(function() {
+        console.log('reCAPTCHA ready');
         grecaptcha.execute('{{ recaptcha_site_key }}', {action: 'login'})
         .then(function(token) {
-            console.log('reCAPTCHA token obtenido:', token);
+            console.log('Token obtenido:', token.substring(0, 50) + '...');
             document.getElementById('recaptcha_token').value = token;
             document.getElementById('loginForm').submit();
         })
         .catch(function(error) {
-            console.error('Error de reCAPTCHA:', error);
-            // Enviar sin token en caso de error
-            document.getElementById('loginForm').submit();
+            console.error('Error reCAPTCHA:', error);
+            alert('Error de reCAPTCHA: ' + error);
         });
     });
 });

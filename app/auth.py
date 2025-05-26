@@ -13,10 +13,14 @@ def login():
         password = request.form['password']
         recaptcha_token = request.form.get('recaptcha_token')
 
-        # Validar reCAPTCHA usando la variable de entorno
+        print(
+            f"reCAPTCHA token recibido: {recaptcha_token[:50] if recaptcha_token else 'None'}...")
+        print(
+            f"Secret Key configurada: {'Sí' if current_app.config.get('RECAPTCHA_SECRET_KEY') else 'No'}")
+
+        # Validar reCAPTCHA
         if recaptcha_token:
             recaptcha_data = {
-                # Usar variable de entorno
                 'secret': current_app.config['RECAPTCHA_SECRET_KEY'],
                 'response': recaptcha_token
             }
@@ -25,35 +29,39 @@ def login():
                 recaptcha_response = requests.post(
                     'https://www.google.com/recaptcha/api/siteverify',
                     data=recaptcha_data,
-                    timeout=5
+                    timeout=10
                 )
 
                 result = recaptcha_response.json()
+                print(f"reCAPTCHA response completa: {result}")
 
-                # Debug: imprimir el resultado (remover en producción)
-                print(f"reCAPTCHA result: {result}")
-
-                # Verificar si reCAPTCHA falló
+                # Verificar respuesta
                 if not result.get('success'):
                     error_codes = result.get('error-codes', [])
                     print(f"reCAPTCHA errors: {error_codes}")
                     flash(
-                        'Error de verificación de seguridad. Intenta de nuevo.', 'danger')
+                        f'Error de verificación: {", ".join(error_codes)}', 'danger')
                     return render_template('login.html')
 
-                # Para reCAPTCHA v3, verificar el score
+                # Verificar score para v3
                 score = result.get('score', 0)
-                if score < 0.3:  # Umbral más bajo para pruebas
-                    print(f"reCAPTCHA score too low: {score}")
+                action = result.get('action', '')
+                print(f"reCAPTCHA score: {score}, action: {action}")
+
+                if score < 0.1:  # Umbral muy bajo para testing
                     flash(
-                        'Verificación de seguridad fallida. Intenta de nuevo.', 'danger')
+                        f'Score de seguridad muy bajo: {score}. Intenta de nuevo.', 'warning')
                     return render_template('login.html')
+
+                print("reCAPTCHA validado exitosamente")
 
             except requests.RequestException as e:
-                print(f"reCAPTCHA request error: {e}")
+                print(f"Error de conexión reCAPTCHA: {e}")
                 flash(
-                    'Error de conectividad. Procediendo sin verificación adicional.', 'warning')
+                    'Error de conectividad con el servicio de verificación.', 'warning')
+                # Continuar sin reCAPTCHA en caso de error de red
         else:
+            print("No se recibió token de reCAPTCHA")
             flash('Token de verificación faltante.', 'danger')
             return render_template('login.html')
 
