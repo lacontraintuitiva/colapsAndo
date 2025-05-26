@@ -21,7 +21,7 @@
                       {% endif %}
                     {% endwith %}
                     
-                    <form method="POST">
+                    <form id="loginForm" method="POST">
                         <div class="mb-3">
                             <label class="form-label" style="color: #6c757d; font-weight: 100; letter-spacing: 0.3px;">Email</label>
                             <input type="email" class="form-control" name="email" required
@@ -32,7 +32,10 @@
                             <input type="password" class="form-control" name="password" required
                                    style="border: 1px solid #e9ecef; background-color: #ffffff; font-weight: 100; letter-spacing: 0.2px;">
                         </div>
-                        <button type="submit" class="btn btn-lg w-100" 
+                        <!-- Campo oculto para el token de reCAPTCHA -->
+                        <input type="hidden" name="recaptcha_token" id="recaptcha_token">
+                        
+                        <button type="button" class="btn btn-lg w-100" id="loginBtn"
                                 style="background-color: #ffffff; border: 1px solid #8da08f; color: #8da08f; font-weight: 100; letter-spacing: 0.3px;">
                             Entrar
                         </button>
@@ -52,6 +55,34 @@
         </div>
     </div>
 </div>
+
+<script>
+document.getElementById('loginBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    
+    // Verificar que reCAPTCHA esté cargado
+    if (typeof grecaptcha === 'undefined') {
+        console.error('reCAPTCHA no está cargado');
+        document.getElementById('loginForm').submit();
+        return;
+    }
+    
+    // Ejecutar reCAPTCHA
+    grecaptcha.ready(function() {
+        grecaptcha.execute('{{ recaptcha_site_key }}', {action: 'login'})
+        .then(function(token) {
+            console.log('reCAPTCHA token obtenido:', token);
+            document.getElementById('recaptcha_token').value = token;
+            document.getElementById('loginForm').submit();
+        })
+        .catch(function(error) {
+            console.error('Error de reCAPTCHA:', error);
+            // Enviar sin token en caso de error
+            document.getElementById('loginForm').submit();
+        });
+    });
+});
+</script>
 
 <style>
 /* Efectos hover para el botón de entrar */
