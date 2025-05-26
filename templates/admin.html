@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card shadow">
+    <div class="card-header bg-dark text-white">
+        <h5 class="mb-0">Panel de Administración</h5>
+    </div>
+    
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Rol</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user[1] }}</td>
+                        <td>{{ user[2] }}</td>
+                        <td>{{ user[4] }}</td>
+                        <td>{{ user[5] }}</td>
+                        <td>
+                            <a href="{{ url_for('admin.edit_user', user_id=user[0]) }}" 
+                               class="btn btn-sm btn-outline-primary">
+                               Editar
+                            </a>
+                            <!-- En tu tabla de usuarios -->
+                            <form action="{{ url_for('admin.delete_user', user_id=user[0]) }}" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
