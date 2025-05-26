@@ -1,0 +1,15 @@
+flask
+flask-bcrypt
+python-dotenv  # <-- Nombre correcto/art-exhibition-manager
+  ├── app.py
+  ├── database.db
+  ├── /static
+  │    ├── css/style.css
+  │    └── images/
+  ├── /templates
+  │    ├── admin.html
+  │    ├── base.html
+  │    ├── edit_user.html
+  │    ├── login.html
+  │    └── register.html
+  └── requirements.txt
