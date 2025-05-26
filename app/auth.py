@@ -95,3 +95,20 @@ def logout():
 @auth_bp.route('/')
 def index():
     return render_template('index.html')
+
+
+# Agregar esta ruta al final de auth.py para debug
+@auth_bp.route('/debug-recaptcha')
+def debug_recaptcha():
+    from flask import current_app
+    site_key = current_app.config.get('RECAPTCHA_SITE_KEY', 'NO_CONFIGURADO')
+    secret_key = current_app.config.get(
+        'RECAPTCHA_SECRET_KEY', 'NO_CONFIGURADO')
+
+    return f"""
+    <h1>Debug reCAPTCHA</h1>
+    <p><strong>Site Key:</strong> {site_key}</p>
+    <p><strong>Secret Key:</strong> {secret_key[:20]}... (primeros 20 caracteres)</p>
+    <p><strong>Site Key length:</strong> {len(site_key) if site_key else 0}</p>
+    <p><strong>Secret Key length:</strong> {len(secret_key) if secret_key else 0}</p>
+    """

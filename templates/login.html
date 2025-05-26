@@ -41,39 +41,56 @@
                         </button>
                     </form>
                 </div>
+                
+                <div class="card-footer text-center" style="background-color: #ffffff; border-top: 1px solid #e9ecef;">
+                    <small style="color: #6c757d; font-weight: 100;">
+                        ¿No tienes cuenta? 
+                        <a href="{{ url_for('register.register') }}" class="text-decoration-none" 
+                           style="color: #7c8798; font-weight: 200;">
+                            Regístrate aquí
+                        </a>.
+                    </small>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-console.log('Site Key:', '{{ recaptcha_site_key }}');
+// Debug: Verificar que todo esté cargado
+console.log('=== DEBUGGING RECAPTCHA ===');
+console.log('Site Key disponible:', '{{ recaptcha_site_key }}' !== '');
+console.log('Site Key valor:', '{{ recaptcha_site_key }}');
 
-document.getElementById('loginBtn').addEventListener('click', function(e) {
-    e.preventDefault();
-    
-    console.log('Botón clickeado');
+window.addEventListener('load', function() {
+    console.log('Página cargada');
     console.log('grecaptcha disponible:', typeof grecaptcha !== 'undefined');
     
-    if (typeof grecaptcha === 'undefined') {
-        console.error('reCAPTCHA no está cargado');
-        alert('Error: reCAPTCHA no está cargado');
-        return;
-    }
+    setTimeout(function() {
+        console.log('Después de 2 segundos - grecaptcha disponible:', typeof grecaptcha !== 'undefined');
+    }, 2000);
     
-    grecaptcha.ready(function() {
-        console.log('reCAPTCHA ready');
-        grecaptcha.execute('{{ recaptcha_site_key }}', {action: 'login'})
-        .then(function(token) {
-            console.log('Token obtenido:', token.substring(0, 50) + '...');
-            document.getElementById('recaptcha_token').value = token;
-            document.getElementById('loginForm').submit();
-        })
-        .catch(function(error) {
-            console.error('Error reCAPTCHA:', error);
-            alert('Error de reCAPTCHA: ' + error);
+    // Agregar evento al botón
+    const loginBtn = document.getElementById('loginBtn');
+    if (loginBtn) {
+        loginBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Botón de login clickeado');
+            
+            const form = document.getElementById('loginForm');
+            
+            // Usar la función global de base.html
+            if (typeof submitFormWithRecaptcha === 'function') {
+                console.log('Usando función global submitFormWithRecaptcha');
+                submitFormWithRecaptcha(form, 'login');
+            } else {
+                console.error('submitFormWithRecaptcha no está disponible');
+                alert('Error: función de reCAPTCHA no disponible');
+            }
         });
-    });
+    } else {
+        console.error('Botón de login no encontrado');
+    }
 });
 </script>
 
