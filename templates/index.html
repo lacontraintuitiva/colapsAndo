@@ -1,34 +1,62 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white text-center">
-                    <h3>Bienvenido al Sistema</h3>
+<div class="container-fluid vh-100 d-flex align-items-center justify-content-center">
+    <div class="row w-100 justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-header text-center" style="background-color: #7c8798; color: #ffffff; border: none;">
+                    <h3 style="font-weight: 400; letter-spacing: 0.5px;">Bienvenido al Sistema</h3>
                 </div>
                 <div class="card-body text-center">
-                    <p class="lead mb-4">Selecciona una opción para continuar:</p>
+                    <p class="lead mb-4" style="color: #5a6268;">Selecciona una opción para continuar:</p>
                     
                     <div class="d-grid gap-3">
-                        <a href="{{ url_for('auth.login') }}" class="btn btn-success btn-lg">
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-lg" 
+                           style="background-color: #8da08f; border-color: #8da08f; color: white; font-weight: 400; letter-spacing: 0.3px;">
                             <i class="fas fa-sign-in-alt me-2"></i>
                             Ingresar
                         </a>
                         
-                        <a href="{{ url_for('register.register') }}" class="btn btn-primary btn-lg">
+                        <a href="{{ url_for('register.register') }}" class="btn btn-lg" 
+                           style="background-color: #7c8798; border-color: #7c8798; color: white; font-weight: 400; letter-spacing: 0.3px;">
                             <i class="fas fa-user-plus me-2"></i>
                             Registrarse
                         </a>
                     </div>
                 </div>
                 
-                <div class="card-footer text-muted text-center">
-                    <small>¿Ya tienes cuenta? Ingresa. ¿Eres nuevo? Regístrate.</small>
+                <div class="card-footer text-center" style="background-color: #f8f9fa; border-top: 1px solid #e9ecef;">
+                    <small style="color: #6c757d;">
+                        ¿Ya tienes cuenta? 
+                        <a href="{{ url_for('auth.login') }}" class="text-decoration-none" 
+                           style="color: #8da08f; font-weight: 500;">
+                            Ingresa
+                        </a>. 
+                        ¿Eres nuevo? 
+                        <a href="{{ url_for('register.register') }}" class="text-decoration-none" 
+                           style="color: #7c8798; font-weight: 500;">
+                            Regístrate
+                        </a>.
+                    </small>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+/* Efectos hover para los botones */
+.btn:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+}
+
+/* Efectos hover para los enlaces */
+a:hover {
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+}
+</style>
 {% endblock %}
