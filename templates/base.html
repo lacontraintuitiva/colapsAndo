@@ -8,62 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600&display=swap" rel="stylesheet">
-    
-    <style>
-        /* Aplicar Inter Thin a toda la página */
-        * {
-            font-family: 'Inter', sans-serif;
-            font-weight: 100;
-        }
-        
-        /* Fondo completamente blanco */
-        body {
-            background-color: #ffffff !important;
-        }
-        
-        /* Estilo ultra-minimalista para el navbar - solo blanco */
-        .clean-navbar {
-            background-color: #ffffff;
-            border-bottom: 1px solid #e9ecef;
-            box-shadow: none;
-            padding: 1.5rem 0;
-        }
-        
-        .clean-navbar .navbar-brand {
-            color: #2c3e50 !important;
-            font-weight: 500 !important;
-            font-size: 1.4rem;
-            letter-spacing: 1px;
-        }
-        
-        .clean-navbar .nav-link {
-            color: #6c757d !important;
-            font-weight: 100;
-            font-size: 0.95rem;
-            letter-spacing: 0.5px;
-            padding: 0.5rem 1.2rem !important;
-            margin: 0 0.3rem;
-            transition: all 0.3s ease;
-        }
-        
-        .clean-navbar .nav-link:hover {
-            color: #2c3e50 !important;
-            background-color: #ffffff;
-            transform: translateY(-1px);
-        }
-        
-        .clean-navbar .nav-link.active {
-            color: #2c3e50 !important;
-            background-color: #ffffff;
-            border-bottom: 1px solid #2c3e50;
-            font-weight: 200;
-        }
-        
-        .clean-navbar .navbar-text {
-            color: #6c757d !important;
-            font-weight: 100;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <!-- Navbar ultra-minimalista -->

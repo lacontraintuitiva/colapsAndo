@@ -23,24 +23,21 @@
                     
                     <form method="POST">
                         <div class="mb-3">
-                            <label class="form-label" style="color: #6c757d; font-weight: 100; letter-spacing: 0.3px;">Nombre</label>
-                            <input type="text" class="form-control" name="name" required
-                                   style="border: 1px solid #e9ecef; background-color: #ffffff; font-weight: 100; letter-spacing: 0.2px;">
+                            <input type="text" class="form-control" name="name" required placeholder="Nombre">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" style="color: #6c757d; font-weight: 100; letter-spacing: 0.3px;">Email</label>
-                            <input type="email" class="form-control" name="email" required
-                                   style="border: 1px solid #e9ecef; background-color: #ffffff; font-weight: 100; letter-spacing: 0.2px;">
+                            <input type="email" class="form-control" name="email" required placeholder="Email">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" style="color: #6c757d; font-weight: 100; letter-spacing: 0.3px;">Contraseña</label>
-                            <input type="password" class="form-control" name="password" required
-                                   style="border: 1px solid #e9ecef; background-color: #ffffff; font-weight: 100; letter-spacing: 0.2px;">
+                            <input type="password" class="form-control" name="password" required placeholder="Contraseña">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" style="color: #6c757d; font-weight: 100; letter-spacing: 0.3px;">Confirmar Contraseña</label>
-                            <input type="password" class="form-control" name="confirm_password" required
-                                   style="border: 1px solid #e9ecef; background-color: #ffffff; font-weight: 100; letter-spacing: 0.2px;">
+                            <input type="password" class="form-control" name="confirm_password" required placeholder="Confirmar contraseña">
+                        </div>
+                        <div class="mb-3">
+                            <small class="text-muted" style="font-size: 0.9em;">
+                                La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula y un número.
+                            </small>
                         </div>
                         <button type="submit" class="btn btn-lg w-100" 
                                 style="background-color: #ffffff; border: 1px solid #7c8798; color: #7c8798; font-weight: 100; letter-spacing: 0.3px;">
@@ -48,7 +45,6 @@
                         </button>
                     </form>
                 </div>
-                
                 <div class="card-footer text-center" style="background-color: #ffffff; border-top: 1px solid #e9ecef;">
                     <small style="color: #6c757d; font-weight: 100;">
                         ¿Ya tienes cuenta? 

@@ -1,44 +1,39 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="card shadow">
-    <div class="card-header bg-dark text-white">
-        <h5 class="mb-0">Panel de Administración</h5>
-    </div>
-    
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Email</th>
-                        <th>Rol</th>
-                        <th>Estado</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for user in users %}
-                    <tr>
-                        <td>{{ user[1] }}</td>
-                        <td>{{ user[2] }}</td>
-                        <td>{{ user[4] }}</td>
-                        <td>{{ user[5] }}</td>
-                        <td>
-                            <a href="{{ url_for('admin.edit_user', user_id=user[0]) }}" 
-                               class="btn btn-sm btn-outline-primary">
-                               Editar
-                            </a>
-                            <!-- En tu tabla de usuarios -->
-                            <form action="{{ url_for('admin.delete_user', user_id=user[0]) }}" method="post" style="display:inline;">
-                                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
-                            </form>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+<div class="container-fluid vh-100 d-flex align-items-center justify-content-center">
+    <div class="row w-100 justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header text-center" style="background-color: #ffffff; color: #2c3e50; border: none;">
+                    <h4 style="font-weight: 200; letter-spacing: 0.8px;">Panel de Administración</h4>
+                </div>
+                <div class="card-body">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                      {% if messages %}
+                        {% for category, message in messages %}
+                          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert" 
+                               style="background-color: #ffffff; border: 1px solid #e9ecef; color: #6c757d; font-weight: 100;">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                          </div>
+                        {% endfor %}
+                      {% endif %}
+                    {% endwith %}
+                    
+                    <div class="text-center mb-4" style="color: #6c757d; font-weight: 100;">
+                        Bienvenido/a al panel de administración.
+                    </div>
+                    
+                    <!-- Aquí puedes agregar el contenido del panel, por ejemplo: -->
+                    <div class="d-grid gap-3">
+                        <a href="{{ url_for('auth.logout') }}" class="btn btn-lg"
+                           style="background-color: #ffffff; border: 1px solid #8da08f; color: #8da08f; font-weight: 100; letter-spacing: 0.3px;">
+                            Cerrar sesión
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
