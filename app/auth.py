@@ -30,3 +30,7 @@ def logout():
     session.clear()
     flash('Sesión cerrada.', 'info')
     return redirect(url_for('auth.login'))
+    
+@auth_bp.route('/')
+def index():
+    return render_template('index.html')
