@@ -1,7 +1,6 @@
 import os
 from flask import Flask
 
-
 def create_app():
     base_dir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
     templates_dir = os.path.join(base_dir, 'templates')

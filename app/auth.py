@@ -18,6 +18,8 @@ def login():
         if user and check_password_hash(user[1], password):
             session['user_id'] = user[0]
             session['role'] = user[2]
+            # Agregar esta línea para guardar el nombre
+            session['user_name'] = user[3] if len(user) > 3 else 'Usuario'
             flash('Inicio de sesión exitoso.', 'success')
             return redirect(url_for('admin.admin_panel'))
         else:
@@ -30,3 +32,8 @@ def logout():
     session.clear()
     flash('Sesión cerrada.', 'info')
     return redirect(url_for('auth.login'))
+
+
+@auth_bp.route('/')
+def index():
+    return render_template('index.html')
