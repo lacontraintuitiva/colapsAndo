@@ -14,13 +14,11 @@
                     <div class="d-grid gap-3">
                         <a href="{{ url_for('auth.login') }}" class="btn btn-lg" 
                            style="background-color: #ffffff; border: 1px solid #8da08f; color: #8da08f; font-weight: 100; letter-spacing: 0.3px;">
-                            <i class="fas fa-sign-in-alt me-2"></i>
                             Ingresar
                         </a>
                         
                         <a href="{{ url_for('register.register') }}" class="btn btn-lg" 
                            style="background-color: #ffffff; border: 1px solid #7c8798; color: #7c8798; font-weight: 100; letter-spacing: 0.3px;">
-                            <i class="fas fa-user-plus me-2"></i>
                             Registrarse
                         </a>
                     </div>
@@ -46,12 +44,11 @@
 </div>
 
 <style>
-/* Efectos hover para los botones - arreglar texto blanco */
+/* Efectos hover para los botones */
 .btn:hover {
     opacity: 0.85;
     transform: translateY(-1px);
     transition: all 0.2s ease;
-    /* Mantener el color del texto en hover */
     color: inherit !important;
 }
 
