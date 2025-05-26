@@ -7,7 +7,6 @@
             <div class="card shadow-sm">
                 <div class="card-header text-center" style="background-color: #ffffff; color: #2c3e50; border: none;">
                     <h4 style="font-weight: 200; letter-spacing: 0.8px;">Iniciar Sesión</h4>
-                    <small style="color: #8c8c8c;">Site Key: {{ recaptcha_site_key[:20] if recaptcha_site_key else 'No configurado' }}...</small>
                 </div>
                 <div class="card-body">
                     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -22,7 +21,7 @@
                       {% endif %}
                     {% endwith %}
                     
-                    <form id="loginForm" method="POST">
+                    <form method="POST">
                         <div class="mb-3">
                             <label class="form-label" style="color: #6c757d; font-weight: 100; letter-spacing: 0.3px;">Email</label>
                             <input type="email" class="form-control" name="email" required
@@ -33,9 +32,8 @@
                             <input type="password" class="form-control" name="password" required
                                    style="border: 1px solid #e9ecef; background-color: #ffffff; font-weight: 100; letter-spacing: 0.2px;">
                         </div>
-                        <input type="hidden" name="recaptcha_token" id="recaptcha_token">
                         
-                        <button type="button" class="btn btn-lg w-100" id="loginBtn"
+                        <button type="submit" class="btn btn-lg w-100"
                                 style="background-color: #ffffff; border: 1px solid #8da08f; color: #8da08f; font-weight: 100; letter-spacing: 0.3px;">
                             Entrar
                         </button>
@@ -55,66 +53,4 @@
         </div>
     </div>
 </div>
-
-<script>
-// Debug: Verificar que todo esté cargado
-console.log('=== DEBUGGING RECAPTCHA ===');
-console.log('Site Key disponible:', '{{ recaptcha_site_key }}' !== '');
-console.log('Site Key valor:', '{{ recaptcha_site_key }}');
-
-window.addEventListener('load', function() {
-    console.log('Página cargada');
-    console.log('grecaptcha disponible:', typeof grecaptcha !== 'undefined');
-    
-    setTimeout(function() {
-        console.log('Después de 2 segundos - grecaptcha disponible:', typeof grecaptcha !== 'undefined');
-    }, 2000);
-    
-    // Agregar evento al botón
-    const loginBtn = document.getElementById('loginBtn');
-    if (loginBtn) {
-        loginBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            console.log('Botón de login clickeado');
-            
-            const form = document.getElementById('loginForm');
-            
-            // Usar la función global de base.html
-            if (typeof submitFormWithRecaptcha === 'function') {
-                console.log('Usando función global submitFormWithRecaptcha');
-                submitFormWithRecaptcha(form, 'login');
-            } else {
-                console.error('submitFormWithRecaptcha no está disponible');
-                alert('Error: función de reCAPTCHA no disponible');
-            }
-        });
-    } else {
-        console.error('Botón de login no encontrado');
-    }
-});
-</script>
-
-<style>
-/* Efectos hover para el botón de entrar */
-.btn:hover {
-    opacity: 0.85;
-    transform: translateY(-1px);
-    transition: all 0.2s ease;
-    color: #8da08f !important;
-    background-color: #ffffff !important;
-}
-
-/* Efectos hover para los enlaces */
-a:hover {
-    opacity: 0.8;
-    transition: opacity 0.2s ease;
-}
-
-/* Focus en inputs */
-.form-control:focus {
-    border-color: #8da08f;
-    box-shadow: 0 0 0 0.1rem rgba(141, 160, 143, 0.1);
-    background-color: #ffffff !important;
-}
-</style>
 {% endblock %}
