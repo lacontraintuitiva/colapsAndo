@@ -203,14 +203,18 @@
         .recaptcha-terms a:hover {
             color: #6c757d;
         }
+        
+        .site-title {
+            font-weight: 300 !important;
+        }
     </style>
 </head>
 <body>
     <!-- Navbar ultra-minimalista -->
     <nav class="navbar navbar-expand-lg clean-navbar">
         <div class="container">
-            <a class="navbar-brand" href="{{ url_for('auth.index') }}">
-                <i class="fas fa-palette me-2" style="font-size: 1.1rem; font-weight: 100;"></i>colapsAndo
+            <a class="navbar-brand site-title" href="{{ url_for('auth.index') }}">
+                colapsAndo
             </a>
             
             <div class="navbar-nav ms-auto">
