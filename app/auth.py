@@ -12,14 +12,15 @@ def login():
         password = request.form['password']
         conn = sqlite3.connect('database.db')
         c = conn.cursor()
-        c.execute("SELECT id, password, role FROM users WHERE email = ?", (email,))
+        # Agregar 'name' al SELECT
+        c.execute(
+            "SELECT id, password, role, name FROM users WHERE email = ?", (email,))
         user = c.fetchone()
         conn.close()
         if user and check_password_hash(user[1], password):
             session['user_id'] = user[0]
             session['role'] = user[2]
-            # Agregar esta línea para guardar el nombre
-            session['user_name'] = user[3] if len(user) > 3 else 'Usuario'
+            session['user_name'] = user[3]  # Ahora sí existe user[3]
             flash('Inicio de sesión exitoso.', 'success')
             return redirect(url_for('admin.admin_panel'))
         else:
