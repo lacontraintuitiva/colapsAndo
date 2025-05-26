@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container-fluid vh-100 d-flex align-items-center justify-content-center" style="padding-top: 100px;">
+<div class="container-fluid vh-100 d-flex align-items-center justify-content-center">
     <div class="row w-100 justify-content-center">
         <div class="col-11 col-sm-8 col-md-6 col-lg-4">
             <div class="card shadow-sm">
@@ -44,4 +44,21 @@
         </div>
     </div>
 </div>
+
+<style>
+/* Efectos hover para los botones - arreglar texto blanco */
+.btn:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+    /* Mantener el color del texto en hover */
+    color: inherit !important;
+}
+
+/* Efectos hover para los enlaces */
+a:hover {
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+}
+</style>
 {% endblock %}

@@ -1,32 +1,80 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="card mx-auto" style="max-width: 400px;">
-    <div class="card-header bg-primary text-white">
-        <h4>Iniciar Sesión</h4>
-    </div>
-    <div class="card-body">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            {% for category, message in messages %}
-              <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-              </div>
-            {% endfor %}
-          {% endif %}
-        {% endwith %}
-        <form method="POST">
-            <div class="mb-3">
-                <label class="form-label">Email</label>
-                <input type="email" class="form-control" name="email" required>
+<div class="container-fluid vh-100 d-flex align-items-center justify-content-center">
+    <div class="row w-100 justify-content-center">
+        <div class="col-11 col-sm-8 col-md-6 col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-header text-center" style="background-color: #ffffff; color: #2c3e50; border: none;">
+                    <h4 style="font-weight: 200; letter-spacing: 0.8px;">Iniciar Sesión</h4>
+                </div>
+                <div class="card-body">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                      {% if messages %}
+                        {% for category, message in messages %}
+                          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert" 
+                               style="background-color: #ffffff; border: 1px solid #e9ecef; color: #6c757d; font-weight: 100;">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                          </div>
+                        {% endfor %}
+                      {% endif %}
+                    {% endwith %}
+                    
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label class="form-label" style="color: #6c757d; font-weight: 100; letter-spacing: 0.3px;">Email</label>
+                            <input type="email" class="form-control" name="email" required
+                                   style="border: 1px solid #e9ecef; background-color: #ffffff; font-weight: 100; letter-spacing: 0.2px;">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" style="color: #6c757d; font-weight: 100; letter-spacing: 0.3px;">Contraseña</label>
+                            <input type="password" class="form-control" name="password" required
+                                   style="border: 1px solid #e9ecef; background-color: #ffffff; font-weight: 100; letter-spacing: 0.2px;">
+                        </div>
+                        <button type="submit" class="btn btn-lg w-100" 
+                                style="background-color: #ffffff; border: 1px solid #8da08f; color: #8da08f; font-weight: 100; letter-spacing: 0.3px;">
+                            <i class="fas fa-sign-in-alt me-2"></i>
+                            Entrar
+                        </button>
+                    </form>
+                </div>
+                
+                <div class="card-footer text-center" style="background-color: #ffffff; border-top: 1px solid #e9ecef;">
+                    <small style="color: #6c757d; font-weight: 100;">
+                        ¿No tienes cuenta? 
+                        <a href="{{ url_for('register.register') }}" class="text-decoration-none" 
+                           style="color: #7c8798; font-weight: 200;">
+                            Regístrate aquí
+                        </a>.
+                    </small>
+                </div>
             </div>
-            <div class="mb-3">
-                <label class="form-label">Contraseña</label>
-                <input type="password" class="form-control" name="password" required>
-            </div>
-            <button type="submit" class="btn btn-primary w-100">Entrar</button>
-        </form>
+        </div>
     </div>
 </div>
+
+<style>
+/* Efectos hover para el botón de entrar */
+.btn:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+    color: #8da08f !important; /* Mantener el color verde grisáceo */
+    background-color: #ffffff !important;
+}
+
+/* Efectos hover para los enlaces */
+a:hover {
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+}
+
+/* Focus en inputs */
+.form-control:focus {
+    border-color: #8da08f;
+    box-shadow: 0 0 0 0.1rem rgba(141, 160, 143, 0.1);
+    background-color: #ffffff !important;
+}
+</style>
 {% endblock %}
