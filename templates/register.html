@@ -13,9 +13,9 @@
                 <small id="password-feedback" class="form-text password-feedback"></small>
                 <small id="confirm-feedback" class="form-text confirm-feedback"></small>
                 <div class="card-body">
+                    {% set hide_form = False %}
                     {% with messages = get_flashed_messages(with_categories=true) %}
                       {% if messages %}
-                        {% set hide_form = False %}
                         {% for category, message in messages %}
                           <div class="alert alert-{{ category }} mt-3" role="alert">
                             {{ message }}
