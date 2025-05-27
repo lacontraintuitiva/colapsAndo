@@ -1,49 +1,56 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container-fluid vh-100 d-flex align-items-center justify-content-center">
+<div class="container-fluid d-flex justify-content-center align-items-center" style="min-height: 100vh;">
     <div class="row w-100 justify-content-center">
         <div class="col-11 col-sm-8 col-md-6 col-lg-4">
             <div class="card shadow-sm">
                 <div class="card-header text-center" style="background-color: #ffffff; color: #2c3e50; border: none;">
                     <h4 style="font-weight: 200; letter-spacing: 0.8px;">Crear Cuenta</h4>
                 </div>
+                <!-- Mensaje de validación de email debajo del encabezado -->
+                <small id="email-feedback" class="form-text email-feedback"></small>
+                <small id="password-feedback" class="form-text password-feedback"></small>
+                <small id="confirm-feedback" class="form-text confirm-feedback"></small>
                 <div class="card-body">
                     {% with messages = get_flashed_messages(with_categories=true) %}
                       {% if messages %}
+                        {% set hide_form = False %}
                         {% for category, message in messages %}
-                          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert" 
-                               style="background-color: #ffffff; border: 1px solid #e9ecef; color: #6c757d; font-weight: 100;">
+                          <div class="alert alert-{{ category }} mt-3" role="alert">
                             {{ message }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                           </div>
+                          {% if 'activar tu cuenta' in message %}
+                            {% set hide_form = True %}
+                          {% endif %}
                         {% endfor %}
                       {% endif %}
                     {% endwith %}
                     
-                    <form method="POST">
-                        <div class="mb-3">
-                            <input type="text" class="form-control" name="name" required placeholder="Nombre">
-                        </div>
-                        <div class="mb-3">
-                            <input type="email" class="form-control" name="email" required placeholder="Email">
-                        </div>
-                        <div class="mb-3">
-                            <input type="password" class="form-control" name="password" required placeholder="Contraseña">
-                        </div>
-                        <div class="mb-3">
-                            <input type="password" class="form-control" name="confirm_password" required placeholder="Confirmar contraseña">
-                        </div>
-                        <div class="mb-3">
-                            <small class="text-muted" style="font-size: 0.9em;">
-                                La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula y un número.
-                            </small>
-                        </div>
-                        <button type="submit" class="btn btn-lg w-100" 
-                                style="background-color: #ffffff; border: 1px solid #7c8798; color: #7c8798; font-weight: 100; letter-spacing: 0.3px;">
-                            Registrarse
-                        </button>
-                    </form>
+                    {% if not hide_form %}
+                      <form method="POST">
+                          <div class="mb-3">
+                              <input type="text" class="form-control" name="name" required placeholder="Nombre *">
+                          </div>
+                          <div class="mb-3 position-relative">
+                              <input type="email" class="form-control" name="email" id="email-input" required placeholder="Email *">
+                          </div>
+                          <div class="mb-3">
+                              <input type="password" class="form-control" name="password" id="password-input" required placeholder="Contraseña *">
+                          </div>
+                          <div class="mb-3">
+                              <input type="password" class="form-control" name="confirm_password" id="confirm-input" required placeholder="Confirmar contraseña *">
+                          </div>
+                          <div class="mb-3">
+                              <small class="text-muted" style="font-size: 0.9em;">
+                                  La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula y un número.
+                              </small>
+                          </div>
+                          <button type="submit" class="btn btn-lg w-100 btn-register" id="register-btn" disabled>
+                              Registrarse
+                          </button>
+                      </form>
+                    {% endif %}
                 </div>
                 <div class="card-footer text-center" style="background-color: #ffffff; border-top: 1px solid #e9ecef;">
                     <small style="color: #6c757d; font-weight: 100;">
@@ -58,4 +65,5 @@
         </div>
     </div>
 </div>
+<script src="{{ url_for('static', filename='validation.js') }}"></script>
 {% endblock %}

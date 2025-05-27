@@ -3,9 +3,20 @@ from app.auth import auth_bp
 from app.register import register_bp
 from app.admin import admin_bp
 from config import Config
+from flask_mail import Mail, Message
 
 app = Flask(__name__)
 app.config.from_object(Config)
+
+# Configuración de Flask-Mail
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'walterrojasmx@gmail.com'
+app.config['MAIL_PASSWORD'] = 'oyrx iciw oyus kpid'
+app.config['MAIL_DEFAULT_SENDER'] = 'walterrojasmx@gmail.com'
+
+mail = Mail(app)
 
 # Registrar blueprints
 app.register_blueprint(auth_bp, url_prefix='/')

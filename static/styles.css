@@ -7,6 +7,12 @@
 /* Fondo completamente blanco */
 body {
     background-color: #ffffff !important;
+    /* padding-bottom: 2.2em !important; */ /* Elimina o comenta esta línea */
+    overflow-x: hidden;
+}
+
+html, body {
+    overflow-y: hidden !important;
 }
 
 /* Estilo ultra-minimalista para el navbar - solo blanco */
@@ -52,28 +58,30 @@ body {
     font-weight: 100;
 }
 
-/* Fondo gris muy tenue para todos los campos de formulario */
+/* Fondo gris más notorio y sin borde para campos de formulario */
 .form-control {
-    background-color: #f7f7f9 !important;
-    border: 1px solid #e9ecef !important;
+    background-color: #f2f3f4 !important; /* Gris más visible */
+    border: none !important;
     font-weight: 100 !important;
     letter-spacing: 0.2px;
     box-shadow: none !important;
     margin-bottom: 15px !important;
+    transition: background 0.2s;
 }
-
-/* Elimina la sombra azul de Bootstrap al enfocar */
 .form-control:focus {
-    background-color: #f7f7f9 !important;
-    border-color: #8da08f !important;
-    box-shadow: 0 0 0 0.1rem rgba(141, 160, 143, 0.1) !important;
+    background-color: #e5e7e9 !important; /* Un poco más oscuro al enfocar */
+    border: none !important;
+    box-shadow: 0 0 0 0.1rem rgba(141, 160, 143, 0.08) !important;
     outline: none !important;
 }
 
-/* Títulos de los formularios */
-.card-header h4, .card-header h3 {
-    font-weight: 200 !important;
-    letter-spacing: 0.8px;
+/* Títulos de los formularios en versalitas */
+.card-header h3,
+.card-header h4 {
+    text-transform: uppercase;
+    font-weight: 400 !important;
+    font-size: 80%;
+    letter-spacing: 0.08em;
     color: #2c3e50;
     margin-bottom: 0;
 }
@@ -81,5 +89,165 @@ body {
 /* Si usas <div class="mb-3"> puedes reducir o quitar el margin-bottom de esa clase si lo deseas */
 .mb-3 {
     margin-bottom: 0 !important;
+}
+
+/* Mensajes flash: rosa mexicano oscuro */
+.alert-danger,
+.alert-warning,
+.alert-info,
+.alert-success {
+    background-color: #c2185b !important; /* Rosa mexicano oscuro */
+    color: #fff !important;
+    border: none !important;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+}
+
+.alert-info {
+    background-color: #008000 !important; /* Verde bandera */
+    color: #fff !important;
+    border: none !important;
+    font-weight: 400;
+    text-align: center;
+}
+
+.alert .btn-close {
+    filter: invert(1);
+}
+
+/* Botones principales sin borde */
+.btn-index {
+    border: none !important;
+    background-color: #ffffff !important;
+    color: #8da08f !important;
+    font-weight: 100;
+    letter-spacing: 0.3px;
+    transition: all 0.2s;
+}
+.btn-index.register {
+    color: #7c8798 !important;
+}
+.btn-index:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
+}
+
+/* Quitar borde solo en la card del index */
+.card-index {
+    border: none !important;
+}
+
+/* Ligas simples para index, sin borde, sin fondo, sin border-radius */
+.index-link {
+    display: block;
+    padding: 0.9rem 0;
+    background: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    color: #8da08f !important;
+    font-size: 1.15rem;
+    font-weight: 100;
+    letter-spacing: 0.3px;
+    text-decoration: underline;
+    transition: color 0.2s, opacity 0.2s;
+    margin-bottom: 10px;
+}
+.index-link:last-child {
+    color: #7c8798 !important;
+}
+.index-link:hover {
+    color: #2c3e50 !important;
+    opacity: 0.8;
+    text-decoration: underline;
+}
+
+.email-feedback,
+.password-feedback,
+.confirm-feedback {
+    font-style: italic;
+}
+
+.email-feedback {
+    display: block;
+    min-height: 1.2em;
+    margin-bottom: 4px;
+    margin-left: 2px;
+    font-size: 0.98em;
+    font-weight: 300;
+    color: #c2185b;
+    transition: color 0.2s;
+    padding-left: 2px;
+    text-align: center;
+}
+.email-feedback.valid {
+    color: #43a047; /* Verde para válido */
+}
+
+span.colapsando {
+    font-weight: 400 !important;
+}
+
+.password-feedback,
+.confirm-feedback {
+    display: block;
+    min-height: 1.2em;
+    margin-bottom: 4px;
+    font-size: 0.98em;
+    font-weight: 300;
+    color: #c2185b;
+    transition: color 0.2s;
+    text-align: center;
+    max-width: 350px;      /* Limita el ancho al de los campos */
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    white-space: normal;
+    word-break: break-word;
+    box-sizing: border-box;
+}
+.password-feedback.valid,
+.confirm-feedback.valid {
+    color: #43a047; /* Verde para válido */
+}
+
+.btn-register:disabled,
+.btn-register.disabled {
+    background-color: #e0e0e0 !important;
+    color: #b0b0b0 !important;
+    border: none !important;
+    cursor: not-allowed !important;
+    opacity: 1 !important;
+    box-shadow: none !important;
+    transition: background 0.2s, color 0.2s;
+}
+.btn-register {
+    background-color: #7c8798 !important;
+    color: #fff !important;
+    border: none !important;
+    font-weight: 400;
+    transition: background 0.2s, color 0.2s;
+}
+.btn-register:hover:enabled {
+    background-color: #5a6270 !important;
+    color: #fff !important;
+}
+
+/* Estilo para el footer */
+.footer-lacontraintuitiva {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    background: #fff;
+    color: #7c8798;
+    font-size: 1em;
+    text-align: center;
+    padding: 0.5em 0 0.6em 0;
+    z-index: 1000;
+    border-top: 1px solid #eee;
+    box-shadow: 0 -1px 8px rgba(0,0,0,0.03);
+    font-weight: 300;
+    letter-spacing: 0.5px;
 }
 

@@ -6,7 +6,8 @@ admin_bp = Blueprint('admin', __name__)
 
 @admin_bp.route('/admin')
 def admin_panel():
-    if 'user_id' not in session or session.get('role') != 'admin':
+    if 'user_id' not in session:
+        flash("Debes iniciar sesión para acceder al panel de administración.", "warning")
         return redirect(url_for('auth.login'))
 
     conn = sqlite3.connect('database.db')

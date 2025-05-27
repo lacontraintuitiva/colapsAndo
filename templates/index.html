@@ -1,34 +1,16 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container-fluid vh-100 d-flex align-items-center justify-content-center">
+<!-- Usa este bloque para el contenedor principal de cada página -->
+<div class="container-fluid d-flex justify-content-center align-items-center" style="height: calc(100vh - 2.2em);">
     <div class="row w-100 justify-content-center">
         <div class="col-11 col-sm-8 col-md-6 col-lg-4">
-            <div class="card shadow-sm">
-                <div class="card-header text-center" style="background-color: #ffffff; color: #2c3e50; border: none;">
-                    <h3 style="font-weight: 200; letter-spacing: 0.8px;">Bienvenido al Sistema</h3>
-                </div>
+            <div class="card shadow-sm card-index">
                 <div class="card-body text-center">
-                    <!-- Texto agregado -->
-                    <p class="mb-4" style="color: #6c757d; font-weight: 100;">
-                        Bienvenidx al sistema de registro de proyectos del Festival colapsAndo.
+                    <p class="mb-4 bienvenida-index">
+                        Bienvenidx al sistema de registro de proyectos del Festival <span class="colapsando">colapsAndo</span>.
                     </p>
-                    
-                    <p class="lead mb-4" style="color: #6c757d; font-weight: 100;">Selecciona una opción para continuar:</p>
-                    
-                    <div class="d-grid gap-3">
-                        <a href="{{ url_for('auth.login') }}" class="btn btn-lg" 
-                           style="background-color: #ffffff; border: 1px solid #8da08f; color: #8da08f; font-weight: 100; letter-spacing: 0.3px;">
-                            Ingresar
-                        </a>
-                        
-                        <a href="{{ url_for('register.register') }}" class="btn btn-lg" 
-                           style="background-color: #ffffff; border: 1px solid #7c8798; color: #7c8798; font-weight: 100; letter-spacing: 0.3px;">
-                            Registrarse
-                        </a>
-                    </div>
                 </div>
-                
                 <div class="card-footer text-center" style="background-color: #ffffff; border-top: 1px solid #e9ecef;">
                     <small style="color: #6c757d; font-weight: 100;">
                         ¿Ya tienes cuenta? 
@@ -47,20 +29,4 @@
         </div>
     </div>
 </div>
-
-<style>
-/* Efectos hover para los botones */
-.btn:hover {
-    opacity: 0.85;
-    transform: translateY(-1px);
-    transition: all 0.2s ease;
-    color: inherit !important;
-}
-
-/* Efectos hover para los enlaces */
-a:hover {
-    opacity: 0.8;
-    transition: opacity 0.2s ease;
-}
-</style>
 {% endblock %}
