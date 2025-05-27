@@ -38,6 +38,7 @@ html, body {
     padding: 0.5rem 1.2rem !important;
     margin: 0 0.3rem;
     transition: all 0.3s ease;
+    overflow: visible; /* Permite que el ::after se muestre */
 }
 
 .clean-navbar .nav-link:hover {
@@ -51,6 +52,25 @@ html, body {
     background-color: #ffffff;
     border-bottom: 1px solid #2c3e50;
     font-weight: 200;
+}
+
+@media (max-width: 767px) {
+  .nav-link.active {
+    border-bottom: none !important;
+    padding-bottom: 2px;
+  }
+  .navbar-nav .nav-link.active {
+    border-bottom: none !important;
+    position: relative;
+  }
+  .navbar-nav .nav-link.active::after {
+    content: "";
+    position: absolute;
+    bottom: 8px;  /* Se acerca a la línea base del texto */
+    left: 1.54rem;  /* Alinea con el primer carácter */
+    width: 8px;    /* 8px de largo */
+    border-bottom: 2px solid #7c8798;
+  }
 }
 
 .clean-navbar .navbar-text {
@@ -249,5 +269,38 @@ span.colapsando {
     box-shadow: 0 -1px 8px rgba(0,0,0,0.03);
     font-weight: 300;
     letter-spacing: 0.5px;
+}
+
+/* Archivo: /Users/walter/Trabajos/LaContraintuitiva/www/static/styles.css */
+
+/* Overlay de carga */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(255, 255, 255, 0.8);
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Spinner simple */
+.spinner {
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #3498db;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 

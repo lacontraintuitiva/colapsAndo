@@ -37,7 +37,7 @@ def login():
             session['role'] = user[2]
             session['user_name'] = user[3]
             flash('Inicio de sesión exitoso.', 'success')
-            return redirect(url_for('admin.admin_panel'))
+            return redirect(url_for('admin.register_project'))
         else:
             flash('Credenciales incorrectas.', 'danger')
 
@@ -48,7 +48,7 @@ def login():
 def logout():
     session.clear()
     flash('Sesión cerrada.', 'info')
-    return redirect(url_for('auth.login'))
+    return redirect(url_for('auth.index'))
 
 
 @auth_bp.route('/')
@@ -74,6 +74,8 @@ def debug_recaptcha():
 
 def send_activation_email(user_email, token):
     from run import mail, app  # Importa mail y app desde run.py
+    print("Enviando correo de activación a:",
+          user_email)  # Debug: muestra en consola
     with app.app_context():
         activation_link = url_for('auth.activate', token=token, _external=True)
         msg = Message('Activa tu cuenta', recipients=[user_email])
@@ -99,8 +101,8 @@ def register():
             conn.close()
 
             send_activation_email(email, token)
-            flash('Revisa tu correo para activar tu cuenta.', 'info')
-            return redirect(url_for('auth.login'))
+            # En lugar de redirigir al login, renderiza una plantilla de información
+            return render_template('activation_info.html', email=email)
         except sqlite3.IntegrityError:
             flash('Ya existe una cuenta registrada con ese correo electrónico.', 'danger')
             return render_template('register.html', name=name, email=email)
@@ -123,3 +125,32 @@ def activate(token):
         flash('Enlace inválido o cuenta ya activada.', 'danger')
     conn.close()
     return redirect(url_for('auth.login'))
+
+
+@auth_bp.route('/update_email', methods=['GET', 'POST'])
+def update_email():
+    if request.method == 'POST':
+        current_email = request.form['current_email']
+        new_email = request.form['new_email']
+        conn = sqlite3.connect('database.db')
+        c = conn.cursor()
+        # Buscamos al usuario que aún no haya activado su cuenta
+        c.execute(
+            "SELECT id, activation_token FROM users WHERE email = ? AND is_active=0", (current_email,))
+        user = c.fetchone()
+        if user:
+            user_id, token = user
+            # Actualizamos el correo
+            c.execute("UPDATE users SET email = ? WHERE id = ?",
+                      (new_email, user_id))
+            conn.commit()
+            conn.close()
+            # Reenvía el correo de activación al nuevo email
+            send_activation_email(new_email, token)
+            flash("Correo actualizado. Revisa tu buzón para activar tu cuenta.", "info")
+            return redirect(url_for('auth.login'))
+        else:
+            flash(
+                "No se encontró usuario con ese correo o la cuenta ya está activada.", "danger")
+            conn.close()
+    return render_template('update_email.html')

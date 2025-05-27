@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 120px);">
+  <div class="col-12 col-sm-10 col-md-8 col-lg-6">
+    <div class="card shadow-sm">
+      <div class="card-header text-center" style="background-color: #ffffff; border-bottom: 1px solid #e9ecef;">
+        <h4 style="font-size: 1.2rem; margin: 0;">Registro de Proyecto</h4>
+      </div>
+      <div class="card-body">
+        <form method="POST">
+          <div class="mb-3">
+            <label for="project_name" class="form-label">Nombre del Proyecto</label>
+            <input type="text" class="form-control" id="project_name" name="project_name" required placeholder="Ingresa el nombre del proyecto">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Tipo de Proyecto</label>
+            <div class="d-flex flex-column">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="project_type" id="individual" value="Individual" required>
+                <label class="form-check-label" for="individual">
+                  Individual
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="project_type" id="equipo" value="Equipo">
+                <label class="form-check-label" for="equipo">
+                  Equipo (máximo 3 integrantes)
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="project_type" id="colectivo" value="Colectivo">
+                <label class="form-check-label" for="colectivo">
+                  Colectivo
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="description" class="form-label">Descripción (opcional)</label>
+            <textarea class="form-control" id="description" name="description" rows="3" placeholder="Agrega una breve descripción del proyecto"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Registrar Proyecto</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -52,3 +52,28 @@ def delete_user(user_id):
     conn.commit()
     conn.close()
     return redirect(url_for('admin.admin_panel'))
+
+
+@admin_bp.route('/project/register', methods=['GET', 'POST'])
+def register_project():
+    if request.method == 'POST':
+        project_name = request.form['project_name']
+        # Valores: "Individual", "Equipo", "Colectivo"
+        project_type = request.form['project_type']
+        description = request.form.get('description', '')
+
+        # Aquí deberás almacenar el proyecto en la base de datos.
+        # Ejemplo con SQLite:
+        conn = sqlite3.connect('database.db')
+        c = conn.cursor()
+        # Asegúrate de tener una tabla projects (o el nombre que prefieras) creada previamente.
+        c.execute("""
+            INSERT INTO projects (user_id, project_name, project_type, description)
+            VALUES (?, ?, ?, ?)
+        """, (session.get('user_id'), project_name, project_type, description))
+        conn.commit()
+        conn.close()
+
+        flash('Proyecto registrado exitosamente.', 'success')
+        return redirect(url_for('admin.admin_panel'))
+    return render_template('project_form.html')
