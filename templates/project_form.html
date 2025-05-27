@@ -1,48 +1,150 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 120px);">
-  <div class="col-12 col-sm-10 col-md-8 col-lg-6">
+  <div class="col-12 col-sm-10 col-md-8 col-lg-7">
     <div class="card shadow-sm">
       <div class="card-header text-center" style="background-color: #ffffff; border-bottom: 1px solid #e9ecef;">
         <h4 style="font-size: 1.2rem; margin: 0;">Registro de Proyecto</h4>
       </div>
       <div class="card-body">
-        <form method="POST">
-          <div class="mb-3">
-            <label for="project_name" class="form-label">Nombre del Proyecto</label>
-            <input type="text" class="form-control" id="project_name" name="project_name" required placeholder="Ingresa el nombre del proyecto">
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Tipo de Proyecto</label>
-            <div class="d-flex flex-column">
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="project_type" id="individual" value="Individual" required>
-                <label class="form-check-label" for="individual">
-                  Individual
-                </label>
+        <!-- Indicador de segmento -->
+        <div id="step-indicator" class="mb-4 text-center">
+          Paso <span id="current-step">1</span> de <span id="total-steps">3</span>
+        </div>
+        <form method="POST" enctype="multipart/form-data" id="projectForm">
+          <!-- Paso 1 -->
+          <div class="form-step">
+            <!-- Datos básicos del participante -->
+            <div class="mb-3">
+              <label for="participant_name" class="form-label">Nombre completo</label>
+              <input type="text" class="form-control" id="participant_name" name="participant_name" required>
+            </div>
+            <div class="mb-3">
+              <label for="participant_email" class="form-label">Correo electrónico</label>
+              <input type="email" class="form-control" id="participant_email" name="participant_email" required>
+            </div>
+            <div class="mb-3">
+              <label for="participant_phone" class="form-label">Teléfono de contacto</label>
+              <input type="tel" class="form-control" id="participant_phone" name="participant_phone">
+            </div>
+            <div class="mb-3 row">
+              <div class="col">
+                <label for="participant_country" class="form-label">País</label>
+                <input type="text" class="form-control" id="participant_country" name="participant_country">
               </div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="project_type" id="equipo" value="Equipo">
-                <label class="form-check-label" for="equipo">
-                  Equipo (máximo 3 integrantes)
-                </label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="project_type" id="colectivo" value="Colectivo">
-                <label class="form-check-label" for="colectivo">
-                  Colectivo
-                </label>
+              <div class="col">
+                <label for="participant_city" class="form-label">Ciudad</label>
+                <input type="text" class="form-control" id="participant_city" name="participant_city">
               </div>
             </div>
+            <!-- Información profesional o académica -->
+            <div class="mb-3">
+              <label for="participant_occupation" class="form-label">Ocupación / Profesión</label>
+              <input type="text" class="form-control" id="participant_occupation" name="participant_occupation">
+            </div>
+            <div class="mb-3">
+              <label for="participant_institution" class="form-label">Institución o empresa</label>
+              <input type="text" class="form-control" id="participant_institution" name="participant_institution">
+            </div>
+            <div class="mb-3">
+              <label for="participant_area" class="form-label">Área de especialización</label>
+              <select class="form-select" id="participant_area" name="participant_area" required>
+                <option value="" disabled selected>Selecciona un área</option>
+                <option value="Arte">Arte</option>
+                <option value="Ciencia">Ciencia</option>
+                <option value="Ciencia compleja">Ciencia compleja</option>
+                <option value="Multidisciplinas">Multidisciplinas</option>
+                <option value="Filosofía">Filosofía</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="participant_portfolio" class="form-label">Portafolio o sitio web <span class="text-muted">(opcional)</span></label>
+              <input type="url" class="form-control" id="participant_portfolio" name="participant_portfolio">
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="description" class="form-label">Descripción (opcional)</label>
-            <textarea class="form-control" id="description" name="description" rows="3" placeholder="Agrega una breve descripción del proyecto"></textarea>
+          <!-- Paso 2 -->
+          <div class="form-step d-none">
+            <!-- Detalles sobre la convocatoria -->
+            <div class="mb-3">
+              <label for="project_category" class="form-label">Categoría en la que participa</label>
+              <select class="form-select" id="project_category" name="project_category" required>
+                <option value="" disabled selected>Selecciona una categoría</option>
+                <option value="artes plásticas">Artes plásticas</option>
+                <option value="instalaciones">Instalaciones</option>
+                <option value="artes performativas">Artes performativas</option>
+                <option value="montaje científico">Montaje científico</option>
+                <option value="audiovisual">Audiovisual</option>
+                <option value="danza">Danza</option>
+                <option value="literatura">Literatura</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="project_title" class="form-label">Título de la propuesta o trabajo</label>
+              <input type="text" class="form-control" id="project_title" name="project_title" required>
+            </div>
+            <div class="mb-3">
+              <label for="project_description" class="form-label">Breve descripción del proyecto <span class="text-muted">(máx. 300 palabras)</span></label>
+              <textarea class="form-control" id="project_description" name="project_description" rows="4" maxlength="2000"></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="project_justification" class="form-label">Justificación o relevancia artística/científica</label>
+              <textarea class="form-control" id="project_justification" name="project_justification" rows="3"></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="project_format" class="form-label">Formato o técnica utilizada</label>
+              <input type="text" class="form-control" id="project_format" name="project_format">
+            </div>
+            <div class="mb-3">
+              <label for="project_files" class="form-label">Archivos adjuntos <span class="text-muted">(imágenes, documentos o videos)</span></label>
+              <input type="file" class="form-control" id="project_files" name="project_files" multiple>
+            </div>
           </div>
-          <button type="submit" class="btn btn-primary w-100">Registrar Proyecto</button>
+          <!-- Paso 3 -->
+          <div class="form-step d-none">
+            <!-- Otros datos relevantes -->
+            <div class="mb-3">
+              <label class="form-label">¿Ha participado en ediciones anteriores?</label>
+              <div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="previous_participation" id="participation_yes" value="Sí">
+                  <label class="form-check-label" for="participation_yes">Sí</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="previous_participation" id="participation_no" value="No">
+                  <label class="form-check-label" for="participation_no">No</label>
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">¿Autorizas la difusión en redes y medios?</label>
+              <div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="media_authorization" id="media_yes" value="Sí" required>
+                  <label class="form-check-label" for="media_yes">Sí</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="media_authorization" id="media_no" value="No" required>
+                  <label class="form-check-label" for="media_no">No</label>
+                </div>
+              </div>
+            </div>
+            <div class="mb-3 form-check">
+              <input class="form-check-input" type="checkbox" id="terms" name="terms" required>
+              <label class="form-check-label" for="terms">
+                Acepto los <a href="#" target="_blank">términos y condiciones</a>
+              </label>
+            </div>
+          </div>
+          <!-- Navegador de pasos -->
+          <div class="d-flex justify-content-between align-items-center mt-4">
+            <button type="button" class="btn btn-outline-secondary rounded-circle px-3" id="prevStep" disabled title="Anterior">&lt;</button>
+            <button type="button" class="btn btn-outline-primary rounded-circle px-3" id="nextStep" title="Siguiente">&gt;</button>
+            <button type="submit" class="btn btn-success d-none" id="submitBtn">Guardar proyecto</button>
+          </div>
         </form>
       </div>
     </div>
   </div>
 </div>
+<script src="{{ url_for('static', filename='project_form_steps.js') }}"></script>
 {% endblock %}
