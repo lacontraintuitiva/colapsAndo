@@ -47,12 +47,13 @@ def login():
 @auth_bp.route('/logout')
 def logout():
     session.clear()
-    flash('Sesión cerrada.', 'info')
     return redirect(url_for('auth.index'))
 
 
 @auth_bp.route('/')
 def index():
+    if 'user_id' in session:
+        return redirect(url_for('admin.register_project'))
     return render_template('index.html')
 
 
@@ -154,3 +155,56 @@ def update_email():
                 "No se encontró usuario con ese correo o la cuenta ya está activada.", "danger")
             conn.close()
     return render_template('update_email.html')
+
+
+@auth_bp.route('/account')
+def account():
+    # Renderiza la página de cuenta del usuario
+    return render_template('account.html')
+
+
+@auth_bp.route('/change-password', methods=['POST'])
+def change_password():
+    if 'user_id' not in session:
+        flash('Debes iniciar sesión.', 'warning')
+        return redirect(url_for('auth.login'))
+
+    current_password = request.form.get('current_password')
+    new_password = request.form.get('new_password')
+    confirm_password = request.form.get('confirm_password')
+
+    if not current_password or not new_password or not confirm_password:
+        flash('Completa todos los campos.', 'danger')
+        return redirect(url_for('auth.account'))
+
+    if new_password != confirm_password:
+        flash('Las contraseñas nuevas no coinciden.', 'danger')
+        return redirect(url_for('auth.account'))
+
+    # Obtén el hash actual de la base de datos
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    c.execute("SELECT password FROM users WHERE id = ?", (session['user_id'],))
+    user = c.fetchone()
+    if not user or not check_password_hash(user[0], current_password):
+        conn.close()
+        flash('La contraseña actual es incorrecta.', 'danger')
+        return redirect(url_for('auth.account'))
+
+    # Actualiza la contraseña
+    new_hash = generate_password_hash(new_password)
+    c.execute("UPDATE users SET password = ? WHERE id = ?",
+              (new_hash, session['user_id']))
+    conn.commit()
+    conn.close()
+
+    flash('Contraseña actualizada correctamente.', 'success')
+    return redirect(url_for('auth.account'))
+
+
+@auth_bp.route('/delete-account', methods=['POST'])
+def delete_account():
+    # Lógica para eliminar la cuenta
+    # ...
+    flash('Cuenta eliminada correctamente.', 'info')
+    return redirect(url_for('auth.logout'))

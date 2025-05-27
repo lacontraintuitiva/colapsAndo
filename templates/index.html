@@ -7,7 +7,7 @@
         <div class="col-11 col-sm-8 col-md-6 col-lg-4">
             <div class="card shadow-sm card-index">
                 <div class="card-body text-center">
-                    <p class="mb-4 bienvenida-index">
+                    <p class="mb-4 bienvenida-index fs-2">
                         Bienvenidx al sistema de registro de proyectos del Festival <span class="colapsando">colapsAndo</span>.
                     </p>
                 </div>
@@ -29,4 +29,15 @@
         </div>
     </div>
 </div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      {% if message != 'Sesión cerrada.' %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
 {% endblock %}

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm-8 col-md-6 col-lg-5">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="mb-4 text-center">Configuración de cuenta</h5>
+                    
+                    <!-- Mensajes flash -->
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                      {% if messages %}
+                        <div class="mb-3">
+                          {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} py-2 px-3 mb-2" style="font-size:0.97rem; font-weight: 400;">
+                              {{ message }}
+                            </div>
+                          {% endfor %}
+                        </div>
+                      {% endif %}
+                    {% endwith %}
+
+                    <!-- Cambiar contraseña -->
+                    <form method="POST" action="{{ url_for('auth.change_password') }}">
+                        <div class="mb-3">
+                            <input type="password" class="form-control" name="current_password" placeholder="Contraseña actual" required>
+                        </div>
+                        <div class="mb-3">
+                            <input type="password" class="form-control" name="new_password" placeholder="Nueva contraseña" required>
+                        </div>
+                        <div class="mb-3">
+                            <input type="password" class="form-control" name="confirm_password" placeholder="Confirmar nueva contraseña" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Cambiar contraseña</button>
+                    </form>
+
+                    <hr class="my-4">
+
+                    <!-- Eliminar cuenta -->
+                    <form method="POST" action="{{ url_for('auth.delete_account') }}" onsubmit="return confirm('¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.');">
+                        <button type="submit" class="btn btn-outline-danger w-100">Eliminar cuenta</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

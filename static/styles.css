@@ -304,3 +304,41 @@ span.colapsando {
     100% { transform: rotate(360deg); }
 }
 
+/* Menú desplegable usuario: sin borde ni sombra, sin esquinas redondeadas */
+.dropdown-menu {
+    right: 0 !important;
+    left: auto !important;
+    border-radius: 0 !important;
+    min-width: 160px;
+    box-shadow: none !important;
+    border: none !important;
+    text-align: right;
+    padding-right: 0.5rem;
+    background: #fff !important;
+}
+
+/* Opciones del menú: fuente aún más pequeña y ligera, más gruesa en hover */
+.dropdown-item {
+    font-family: 'Inter', sans-serif !important;
+    font-size: 0.89rem !important;
+    font-weight: 100 !important;
+    letter-spacing: 0.2px;
+    border-radius: 0 !important;
+    text-align: right;
+    transition: font-weight 0.15s, background 0.15s;
+    background: none !important;
+    border: none !important;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+    font-weight: 400 !important;
+    background-color: #f2f3f4 !important;
+    color: #2c3e50 !important;
+}
+
+.font-inter, .form-select.font-inter {
+    font-family: 'Inter', sans-serif !important;
+    font-size: 0.99rem;
+    font-weight: 100;
+}
+

@@ -19,33 +19,31 @@
             </a>
             
             <div class="navbar-nav ms-auto">
-                <!-- Botón Inicio (siempre visible) -->
-                <a class="nav-link {{ 'active' if request.endpoint == 'auth.index' else '' }}" 
-                   href="{{ url_for('auth.index') }}">
-                    <i class="fas fa-home me-1" style="font-size: 0.8rem;"></i>Inicio
-                </a>
-                
                 {% if session.user_id %}
-                    <!-- Usuario logueado -->
-                    <span class="navbar-text me-4">
-                        <i class="fas fa-user me-1" style="font-size: 0.7rem;"></i>{{ session.get('user_name', 'Usuario') }}
-                    </span>
-                    
-                    <a class="nav-link {{ 'active' if request.endpoint == 'admin.admin_panel' else '' }}" 
-                       href="{{ url_for('admin.admin_panel') }}">
-                        <i class="fas fa-cog me-1" style="font-size: 0.8rem;"></i>Panel Admin
-                    </a>
-                    
-                    <a class="nav-link" href="{{ url_for('auth.logout') }}">
-                        <i class="fas fa-sign-out-alt me-1" style="font-size: 0.8rem;"></i>Cerrar Sesión
-                    </a>
+                    <!-- Usuario logueado con menú desplegable -->
+                    <div class="dropdown me-4">
+                        <a class="nav-link dropdown-toggle text-decoration-none" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user me-1" style="font-size: 0.7rem;"></i>{{ session.get('user_name', 'Usuario') }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li>
+                                <a class="dropdown-item" href="{{ url_for('auth.account') }}">
+                                    <i class="fas fa-user-cog me-2"></i>Cuenta
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ url_for('auth.logout') }}">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 {% else %}
                     <!-- Usuario no logueado -->
                     <a class="nav-link {{ 'active' if request.endpoint == 'auth.login' else '' }}" 
                        href="{{ url_for('auth.login') }}">
                         <i class="fas fa-sign-in-alt me-1" style="font-size: 0.8rem;"></i>Ingreso
                     </a>
-                    
                     <a class="nav-link {{ 'active' if 'register' in request.endpoint else '' }}" 
                        href="{{ url_for('register.register') }}">
                         <i class="fas fa-user-plus me-1" style="font-size: 0.8rem;"></i>Registro
@@ -113,15 +111,5 @@
             }
         }
     </script>
-
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          <div class="alert alert-{{ category }} mt-3" role="alert">
-            {{ message }}
-          </div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
 </body>
 </html>

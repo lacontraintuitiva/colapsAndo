@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const totalStepsSpan = document.getElementById('total-steps');
   const prevBtn = document.getElementById('prevStep');
   const nextBtn = document.getElementById('nextStep');
-  const submitBtn = document.getElementById('submitBtn');
+  // El submitBtn siempre está visible, no se oculta
 
   if (totalStepsSpan) totalStepsSpan.textContent = totalSteps;
 
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (currentStepSpan) currentStepSpan.textContent = idx + 1;
     if (prevBtn) prevBtn.disabled = idx === 0;
     if (nextBtn) nextBtn.classList.toggle('d-none', idx === totalSteps - 1);
-    if (submitBtn) submitBtn.classList.toggle('d-none', idx !== totalSteps - 1);
+    // submitBtn siempre visible, no se oculta
   }
 
   if (prevBtn) {
