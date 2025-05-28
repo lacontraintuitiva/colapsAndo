@@ -350,3 +350,101 @@ span.colapsando {
   }
 }
 
+/* Indicadores de guardado/restaurado del formulario multipaso */
+#save-indicator,
+.form-restore-indicator {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 300;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(40,167,69,0.08);
+    opacity: 0.92;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+
+#save-indicator {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #28a745;
+    color: #fff;
+    padding: 8px 18px;
+    z-index: 9999;
+    display: none;
+}
+
+.form-restore-indicator {
+    position: fixed;
+    bottom: 50px;
+    right: 20px;
+    background: #007bff;
+    color: #fff;
+    padding: 6px 14px;
+    z-index: 9999;
+    opacity: 0.92;
+    display: none;
+}
+
+.form-header {
+    font-size: 0.96rem !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.04em !important;
+    text-align: center !important;
+    margin: 0 !important;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Botones de navegación del formulario multipaso */
+.btn-step-nav {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    font-weight: 400;
+    box-shadow: 0 1px 4px rgba(44,62,80,0.06);
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    /* IGUALAR ESTILOS - mismo color para ambos botones */
+    background-color: #fff !important;
+    color: #007bff !important;
+    border: 1px solid #007bff !important;
+}
+
+.btn-step-nav:hover {
+    background-color: #007bff !important;
+    color: #fff !important;
+    border-color: #007bff !important;
+}
+
+.btn-step-nav:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #007bff33;
+}
+
+.btn-step-nav:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #f2f3f4 !important;
+    color: #b0b0b0 !important;
+    border-color: #e0e0e0 !important;
+}
+
+/* Mensaje informativo de guardado automático */
+.form-autosave-info {
+    background: #fffbe6;
+    color: #856404;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 5px;
+    padding: 6px 18px;
+    margin-bottom: 1rem;
+    display: inline-block;
+    box-shadow: 0 1px 4px rgba(255,193,7,0.07);
+    letter-spacing: 0.01em;
+}
+

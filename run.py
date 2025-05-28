@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template, redirect, url_for, session
 from app.auth import auth_bp
 from app.register import register_bp
 from app.admin import admin_bp
@@ -21,7 +21,25 @@ mail = Mail(app)
 # Registrar blueprints
 app.register_blueprint(auth_bp, url_prefix='/')
 app.register_blueprint(register_bp, url_prefix='/')
-app.register_blueprint(admin_bp, url_prefix='/')
+app.register_blueprint(admin_bp)
+
+# AGREGAR ESTAS RUTAS:
+
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+
+@app.route('/registro')
+def registro():
+    if 'user_id' not in session:
+        return redirect(url_for('auth.login'))
+    return redirect(url_for('admin.register_project'))
+
+@app.route('/terminos')
+def terminos():
+    return render_template('terminos.html')
 
 # Context processor para reCAPTCHA
 

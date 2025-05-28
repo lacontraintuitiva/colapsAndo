@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-import sqlite3
+from db import get_db_connection
+from psycopg2 import IntegrityError
 from werkzeug.security import generate_password_hash
 
 register_bp = Blueprint('register', __name__)
@@ -30,19 +31,31 @@ def register():
         # Hash de la contraseña
         hashed_password = generate_password_hash(password)
 
+        conn = None
         try:
-            conn = sqlite3.connect('database.db')
-            c = conn.cursor()
-            c.execute("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)",
-                      (name, email, hashed_password, 'user'))
+            conn = get_db_connection()
+            cur = conn.cursor()
+            cur.execute(
+                "INSERT INTO users (name, email, password, is_active, role) VALUES (%s, %s, %s, %s, %s)",
+                (name, email, hashed_password, False, 'user')
+            )
             conn.commit()
-            flash("Registro exitoso. Ahora puedes iniciar sesión.", "success")
+            cur.close()
+            flash("Registro exitoso. Por favor revisa tu correo para activar tu cuenta.", "success")
             return redirect(url_for('auth.login'))
-        except sqlite3.IntegrityError:
-            flash("El email ya está registrado", "danger")
-            return render_template('register.html')
+        except IntegrityError:
+            if conn:
+                conn.rollback()
+            flash('El correo ya está registrado.', 'danger')
+            return render_template('register.html', name=name, email=email)
+        except Exception as e:
+            if conn:
+                conn.rollback()
+            flash('Error en el registro. Por favor intenta nuevamente.', 'danger')
+            return render_template('register.html', name=name, email=email)
         finally:
-            conn.close()
+            if conn:
+                conn.close()
 
     return render_template('register.html')
 

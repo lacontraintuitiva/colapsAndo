@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8">
+            <h2 class="form-header" style="margin-bottom: 3rem;">TÉRMINOS Y CONDICIONES</h2>
+            
+            <div class="card shadow-sm">
+                <div class="card-body" style="max-height: 600px; overflow-y: auto;">
+                    <h5>1. Aceptación de los Términos</h5>
+                    <p>Al acceder y utilizar este sitio web y participar en nuestros eventos, usted acepta estar sujeto a estos términos y condiciones de uso.</p>
+
+                    <h5>2. Participación en Eventos</h5>
+                    <p>La participación en nuestros eventos está sujeta a los siguientes términos:</p>
+                    <ul>
+                        <li>Los participantes deben proporcionar información veraz y actualizada</li>
+                        <li>Las propuestas deben ser originales y de autoría propia</li>
+                        <li>El contenido no debe infringir derechos de terceros</li>
+                        <li>Nos reservamos el derecho de rechazar propuestas que no cumplan con nuestros criterios</li>
+                    </ul>
+
+                    <h5>3. Derechos de Autor y Propiedad Intelectual</h5>
+                    <p>Los participantes mantienen los derechos de autor sobre sus obras, pero otorgan a La Contraintuitiva una licencia no exclusiva para:</p>
+                    <ul>
+                        <li>Exhibir las obras durante el evento</li>
+                        <li>Utilizar imágenes con fines promocionales</li>
+                        <li>Documentar y difundir el evento</li>
+                    </ul>
+
+                    <h5>4. Política de Privacidad</h5>
+                    <p>Nos comprometemos a proteger su privacidad. Los datos personales recopilados serán utilizados únicamente para:</p>
+                    <ul>
+                        <li>Gestión de la participación en eventos</li>
+                        <li>Comunicaciones relacionadas con el evento</li>
+                        <li>Mejora de nuestros servicios</li>
+                    </ul>
+
+                    <h5>5. Responsabilidades</h5>
+                    <p>La Contraintuitiva no se hace responsable por:</p>
+                    <ul>
+                        <li>Daños o pérdidas de obras durante el evento</li>
+                        <li>Problemas técnicos del sitio web</li>
+                        <li>Cancelaciones por causas de fuerza mayor</li>
+                    </ul>
+
+                    <h5>6. Modificaciones</h5>
+                    <p>Nos reservamos el derecho de modificar estos términos en cualquier momento. Las modificaciones serán efectivas inmediatamente después de su publicación en el sitio web.</p>
+
+                    <h5>7. Contacto</h5>
+                    <p>Para cualquier consulta sobre estos términos, puede contactarnos en:</p>
+                    <p><strong>Email:</strong> lacontraintuitiva@gmail.com</p>
+
+                    <div class="mt-4 text-center">
+                        <a href="{{ url_for('admin.register_project') }}" class="btn btn-primary">Volver al Formulario</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
