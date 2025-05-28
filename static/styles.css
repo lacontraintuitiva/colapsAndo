@@ -342,3 +342,11 @@ span.colapsando {
     font-weight: 100;
 }
 
+@media (max-width: 576px) {
+  .alert.alert-dismissible {
+    width: 90% !important;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
