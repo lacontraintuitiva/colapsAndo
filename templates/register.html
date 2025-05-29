@@ -33,17 +33,21 @@
                     
                     {% if not hide_form %}
                       <form method="POST">
-                          <div class="mb-3">
-                              <input type="text" class="form-control" name="name" required placeholder="Nombre *">
+                          <div class="mb-3 form-floating">
+                              <input type="text" class="form-control" name="name" id="name-input" required placeholder=" ">
+                              <label for="name-input">Nombre *</label>
                           </div>
-                          <div class="mb-3 position-relative">
-                              <input type="email" class="form-control" name="email" id="email-input" required placeholder="Email *">
+                          <div class="mb-3 form-floating">
+                              <input type="email" class="form-control" name="email" id="email-input" required placeholder=" ">
+                              <label for="email-input">Email *</label>
                           </div>
-                          <div class="mb-3">
-                              <input type="password" class="form-control" name="password" id="password-input" required placeholder="Contraseña *">
+                          <div class="mb-3 form-floating">
+                              <input type="password" class="form-control" name="password" id="password-input" required placeholder=" ">
+                              <label for="password-input">Contraseña *</label>
                           </div>
-                          <div class="mb-3">
-                              <input type="password" class="form-control" name="confirm_password" id="confirm-input" required placeholder="Confirmar contraseña *">
+                          <div class="mb-3 form-floating">
+                              <input type="password" class="form-control" name="confirm_password" id="confirm-input" required placeholder=" ">
+                              <label for="confirm-input">Confirmar contraseña *</label>
                           </div>
                           <div class="mb-3">
                               <small class="text-muted" style="font-size: 0.9em;">

@@ -22,11 +22,13 @@
                     {% endwith %}
                     
                     <form method="POST" novalidate>
-                        <div class="mb-3 position-relative">
-                            <input type="email" class="form-control" name="email" id="email-input" required placeholder="Email">
+                        <div class="mb-3 form-floating">
+                            <input type="email" class="form-control" id="email" name="email" required placeholder="Correo electrónico">
+                            <label for="email">Correo electrónico</label>
                         </div>
-                        <div class="mb-3">
-                            <input type="password" class="form-control" name="password" required placeholder="Contraseña">
+                        <div class="mb-3 form-floating">
+                            <input type="password" class="form-control" id="password" name="password" required placeholder="Contraseña">
+                            <label for="password">Contraseña</label>
                         </div>
                         <button type="submit" class="btn btn-lg w-100"
                                 style="background-color: #ffffff; border: 1px solid #8da08f; color: #8da08f; font-weight: 100; letter-spacing: 0.3px;">
