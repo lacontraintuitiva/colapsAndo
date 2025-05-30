@@ -165,14 +165,14 @@
               <div class="form-step position-absolute top-0 start-0 w-100 d-none">
                 <div class="mb-3 section-top-space">
                   <label class="form-label">¿Ha participado en ediciones anteriores?</label>
-                  <div class="form-check">
+                  <div class="form-check form-check-success">
                     <input class="form-check-input" type="radio" name="previous_participation" id="participation_yes" value="Sí"
                       {% if datos.previous_participation == 'Sí' %}checked{% endif %}>
                     <label class="form-check-label" for="participation_yes">
                       Sí, he participado anteriormente
                     </label>
                   </div>
-                  <div class="form-check">
+                  <div class="form-check form-check-success">
                     <input class="form-check-input" type="radio" name="previous_participation" id="participation_no" value="No"
                       {% if datos.previous_participation == 'No' %}checked{% endif %}>
                     <label class="form-check-label" for="participation_no">
@@ -183,14 +183,14 @@
 
                 <div class="mb-3">
                   <label class="form-label">¿Autoriza la difusión de su trabajo en redes sociales y medios de comunicación?</label>
-                  <div class="form-check">
+                  <div class="form-check form-check-success">
                     <input class="form-check-input" type="radio" name="media_authorization" id="media_yes" value="Sí" required
                       {% if datos.media_authorization == 'Sí' %}checked{% endif %}>
                     <label class="form-check-label" for="media_yes">
                       Sí, autorizo la difusión
                     </label>
                   </div>
-                  <div class="form-check">
+                  <div class="form-check form-check-success">
                     <input class="form-check-input" type="radio" name="media_authorization" id="media_no" value="No" required
                       {% if datos.media_authorization == 'No' %}checked{% endif %}>
                     <label class="form-check-label" for="media_no">

@@ -117,10 +117,21 @@ html, body {
   background-image: none;
 }
 
-/* Estilo para inputs de tipo checkbox y radio: color verde para requerido y válido */
-.form-check-input:required:valid {
+.form-check-input:checked {
+  background-color: #198754 !important; /* Bootstrap green */
   border-color: #198754 !important;
+}
+
+/* Radio buttons: borde verde cuando no están seleccionados */
+.form-check-input[type="radio"] {
+  border-color: #198754 !important;
+}
+
+/* Radio buttons: fondo y borde verde cuando están seleccionados */
+.form-check-input[type="radio"]:checked {
   background-color: #198754 !important;
+  border-color: #198754 !important;
+  background-image: none !important;
 }
 
 /* Títulos de los formularios en versalitas */
