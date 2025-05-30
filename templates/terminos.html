@@ -1,13 +1,19 @@
 {% extends "base.html" %}
 
 {% block content %}
+<style>
+@media (max-width: 576px) {
+  .card-body.terminos-body {
+    font-size: 0.95rem;
+  }
+}
+</style>
 <div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-12 col-md-10 col-lg-8">
+        <div class="col-12 col-md-10 col-lg-8 terminos-movil-up" style="padding-top: 120px;">
             <h2 class="form-header" style="margin-bottom: 3rem;">TÉRMINOS Y CONDICIONES</h2>
-            
-            <div class="card shadow-sm">
-                <div class="card-body" style="max-height: 600px; overflow-y: auto;">
+            <div class="card shadow-sm rounded-0">
+                <div class="card-body terminos-body fs-6" style="max-height: 600px; overflow-y: auto;">
                     <h5>1. Aceptación de los Términos</h5>
                     <p>Al acceder y utilizar este sitio web y participar en nuestros eventos, usted acepta estar sujeto a estos términos y condiciones de uso.</p>
 
@@ -50,10 +56,6 @@
                     <h5>7. Contacto</h5>
                     <p>Para cualquier consulta sobre estos términos, puede contactarnos en:</p>
                     <p><strong>Email:</strong> lacontraintuitiva@gmail.com</p>
-
-                    <div class="mt-4 text-center">
-                        <a href="{{ url_for('admin.register_project') }}" class="btn btn-primary">Volver al Formulario</a>
-                    </div>
                 </div>
             </div>
         </div>

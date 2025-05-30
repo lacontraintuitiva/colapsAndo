@@ -1,204 +1,228 @@
 {% extends "base.html" %}
+
 {% block content %}
-<div class="container d-flex justify-content-center" style="min-height: calc(100vh - 120px); padding-top: 2rem;">
-  <div class="col-12 col-sm-10 col-md-8 col-lg-7">
-    <div class="card shadow-sm">
-      <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #ffffff; border-bottom: 1px solid #e9ecef;">
-        <h4 class="form-header mb-0">REGISTRO DE PROYECTO</h4>
-        <!-- Indicador de sección y botones de navegación juntos -->
-        <div class="d-flex align-items-center gap-3">
-          <small class="text-muted">
-            Sección <span id="current-step">1</span> / <span id="total-steps">3</span>
-          </small>
-          <div class="d-flex gap-2">
-            <button type="button" class="btn btn-outline-secondary btn-step-nav" id="prevStep" title="Anterior">&lt;</button>
-            <button type="button" class="btn btn-outline-primary btn-step-nav" id="nextStep" title="Siguiente">&gt;</button>
-          </div>
+<div class="container-fluid min-vh-100 d-flex justify-content-center align-items-center" style="padding-top:40px;">
+  <div class="row w-100 justify-content-center">
+    <div class="col-12 col-sm-10 col-md-8 col-lg-7">
+      <div class="card shadow-sm">
+        <div class="card-header" style="background-color:#fff; color:#2c3e50; border:none;">
+          <h4 class="form-header mb-1">REGISTRO DE PROYECTO</h4>
         </div>
-      </div>
-      
-      <div class="card-body">
-        <!-- ELIMINAR el indicador de aquí -->
-        
-        <!-- Barra de progreso -->
-        <div class="progress mb-4" style="height: 18px;">
-          <div id="formProgress" class="progress-bar bg-info" role="progressbar" style="width: 0%;" aria-valuenow="0"
-            aria-valuemin="0" aria-valuemax="100">
-            0%
+        <div class="card-body pt-1">
+          <!-- Navegación y barra -->
+          <div class="d-flex justify-content-end align-items-center mb-1 gap-2">
+            <span>Sección <span id="current-step">1</span> de <span id="total-steps">3</span></span>
+            <button type="button" class="btn btn-step-nav" id="prevStep">&lt;</button>
+            <button type="button" class="btn btn-step-nav" id="nextStep">&gt;</button>
           </div>
-        </div>
-        
-        <form method="POST" enctype="multipart/form-data" id="projectForm">
-          <!-- Sección 1 - Información del participante -->
-          <div class="form-step">
-            <div class="mb-3">
-              <div class="form-floating">
-                <input type="text" class="form-control" id="participant_name" name="participant_name" required 
-                       placeholder="Nombre completo" value="{{ datos.participant_name or '' }}">
-                <label for="participant_name">Nombre completo *</label>
-              </div>
-            </div>
-            
-            <div class="mb-3">
-              <div class="form-floating">
-                <input type="tel" class="form-control" id="participant_phone" name="participant_phone" required 
-                       placeholder="Teléfono" value="{{ datos.participant_phone or '' }}">
-                <label for="participant_phone">Teléfono (incluir código de país) *</label>
-              </div>
-            </div>
-            
-            <div class="mb-3">
-              <div class="form-floating">
-                <input type="text" class="form-control" id="participant_country" name="participant_country" required 
-                       placeholder="País" value="{{ datos.participant_country or '' }}">
-                <label for="participant_country">País de residencia *</label>
-              </div>
-            </div>
-            
-            <div class="mb-3">
-              <div class="form-floating">
-                <input type="text" class="form-control" id="participant_city" name="participant_city" required 
-                       placeholder="Ciudad" value="{{ datos.participant_city or '' }}">
-                <label for="participant_city">Ciudad de residencia *</label>
-              </div>
-            </div>
-            
-            <div class="mb-3">
-              <div class="form-floating">
-                <input type="text" class="form-control" id="participant_occupation" name="participant_occupation" required 
-                       placeholder="Ocupación" value="{{ datos.participant_occupation or '' }}">
-                <label for="participant_occupation">Ocupación actual *</label>
-              </div>
-            </div>
-            
-            <div class="mb-3">
-              <div class="form-floating">
-                <input type="text" class="form-control" id="participant_institution" name="participant_institution" 
-                       placeholder="Institución" value="{{ datos.participant_institution or '' }}">
-                <label for="participant_institution">Institución donde estudia o trabaja</label>
-              </div>
-            </div>
-            
-            <div class="mb-3">
-              <div class="form-floating">
-                <input type="text" class="form-control" id="participant_area" name="participant_area" required 
-                       placeholder="Área" value="{{ datos.participant_area or '' }}">
-                <label for="participant_area">Área de conocimiento o especialización *</label>
-              </div>
-            </div>
-            
-            <div class="mb-3">
-              <div class="form-floating">
-                <input type="url" class="form-control" id="participant_portfolio" name="participant_portfolio" 
-                       placeholder="Portfolio" value="{{ datos.participant_portfolio or '' }}">
-                <label for="participant_portfolio">Enlace a portfolio o trabajo previo</label>
-              </div>
-            </div>
-          </div>
-          <!-- Sección 2 -->
-          <div class="form-step d-none">
-            <div class="mb-3">
-              <div class="form-floating">
-                <select class="form-select" id="project_category" name="project_category" required>
-                  <option value="" disabled {% if not datos.project_category %}selected{% endif %}></option>
-                  <option value="artes plásticas" {% if datos.project_category == 'artes plásticas' %}selected{% endif %}>Artes plásticas</option>
-                  <option value="instalaciones" {% if datos.project_category == 'instalaciones' %}selected{% endif %}>Instalaciones</option>
-                  <option value="artes performativas" {% if datos.project_category == 'artes performativas' %}selected{% endif %}>Artes performativas</option>
-                  <option value="montaje científico" {% if datos.project_category == 'montaje científico' %}selected{% endif %}>Montaje científico</option>
-                  <option value="audiovisual" {% if datos.project_category == 'audiovisual' %}selected{% endif %}>Audiovisual</option>
-                  <option value="danza" {% if datos.project_category == 'danza' %}selected{% endif %}>Danza</option>
-                  <option value="literatura" {% if datos.project_category == 'literatura' %}selected{% endif %}>Literatura</option>
-                </select>
-                <label for="project_category">Categoría en la que participa *</label>
-              </div>
-            </div>
-            <div class="mb-3">
-              <div class="form-floating">
-                <input type="text" class="form-control" id="project_title" name="project_title" required 
-                       placeholder="Título del proyecto" value="{{ datos.project_title or '' }}">
-                <label for="project_title">Título de la propuesta o trabajo *</label>
-              </div>
-            </div>
-            <div class="mb-3">
-              <div class="form-floating">
-                <textarea class="form-control" id="project_description" name="project_description" 
-                          style="height: 120px" required placeholder="Descripción">{{ datos.project_description or '' }}</textarea>
-                <label for="project_description">Breve descripción del proyecto (máx. 300 palabras) *</label>
-              </div>
-            </div>
-            <div class="mb-3">
-              <div class="form-floating">
-                <input type="text" class="form-control" id="project_format" name="project_format" required 
-                       placeholder="Formato" value="{{ datos.project_format or '' }}">
-                <label for="project_format">Formato o técnica utilizada *</label>
-              </div>
-            </div>
-            <div class="mb-3">
-              <input type="file" class="form-control" id="project_files" name="project_files" multiple required 
-                     placeholder="Archivos adjuntos (imágenes, documentos o videos) *"
-                     {% if datos.project_files %}data-has-files="true"{% endif %}>
-  
-              <!-- Mostrar archivos previamente cargados -->
-              {% if datos.project_files %}
-                <div class="mt-2 p-2 bg-light rounded">
-                  <small class="text-success">
-                    <i class="fas fa-check-circle me-1"></i>
-                    <strong>Archivos cargados:</strong> {{ datos.project_files }}
-                  </small>
-                </div>
-              {% endif %}
-  
-              {% if not datos.project_files %}
-                <small class="form-text text-muted">
-                  Seleccione uno o más archivos (imágenes, documentos o videos)
-                </small>
-              {% endif %}
-            </div>
-          </div>
-          <!-- Sección 3 -->
-          <div class="form-step d-none">
-            <div class="mb-3">
-              <span class="me-2">¿Ha participado en ediciones anteriores?</span>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="previous_participation" id="participation_yes" value="Sí"
-                  {% if datos.previous_participation == 'Sí' %}checked{% endif %}>
-                <label class="form-check-label" for="participation_yes">Sí</label>
-              </div>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="previous_participation" id="participation_no" value="No"
-                  {% if datos.previous_participation == 'No' %}checked{% endif %}>
-                <label class="form-check-label" for="participation_no">No</label>
-              </div>
-            </div>
-            <div class="mb-3 mt-4">
-              <span class="me-2">¿Autorizas la difusión en redes y medios?</span>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="media_authorization" id="media_yes" value="Sí" required
-                  {% if datos.media_authorization == 'Sí' %}checked{% endif %}>
-                <label class="form-check-label" for="media_yes">Sí</label>
-              </div>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="media_authorization" id="media_no" value="No" required
-                  {% if datos.media_authorization == 'No' %}checked{% endif %}>
-                <label class="form-check-label" for="media_no">No</label>
-              </div>
-            </div>
-            <div class="mb-3 mt-4 form-check">
-              <input class="form-check-input" type="checkbox" id="terms" name="terms" required
-                {% if datos.terms %}checked{% endif %}>
-              <label class="form-check-label" for="terms">
-                Acepto los <a href="{{ url_for('admin.terminos') }}" target="_blank">términos y condiciones</a>
-              </label>
-            </div>
-          </div>
-          <!-- Mensaje informativo (más compacto) -->
-          <div class="text-center mt-3">
+          <div class="form-autosave-footer mb-0">
             <small class="form-autosave-info">
-              <i class="fas fa-save me-1"></i>
+              <span style="color: #f7b731; font-size: 1.1em; vertical-align: middle;">&#9888;&#65039;</span>
               Los cambios se guardan automáticamente.
             </small>
           </div>
-        </form>
+          <div class="progress mb-1" style="height:18px;">
+            <div id="formProgress" class="progress-bar bg-info" role="progressbar"
+                 style="width:0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+          </div>
+          
+          <div class="multi-step-wrapper position-relative" style="min-height:600px;">
+            <form method="POST" enctype="multipart/form-data" id="projectForm">
+              
+              <!-- Sección 1: centrada verticalmente -->
+              <div class="form-step position-absolute top-0 start-0 w-100" style="min-height:600px; padding-top: 5px; padding-bottom: 40px;">
+                <div class="mb-3">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="participant_name" name="participant_name" required 
+                           placeholder="Nombre completo" value="{{ datos.participant_name or '' }}">
+                    <label for="participant_name">Nombre completo *</label>
+                  </div>
+                </div>
+                
+                <div class="mb-3">
+                  <div class="form-floating">
+                    <input type="tel" class="form-control" id="participant_phone" name="participant_phone" required 
+                           placeholder="Teléfono (incluir código de país)" value="{{ datos.participant_phone or '' }}">
+                    <label for="participant_phone">Teléfono (incluir código de país) *</label>
+                  </div>
+                </div>
+                
+                <div class="mb-3">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="participant_country" name="participant_country" required 
+                           placeholder="País de residencia" value="{{ datos.participant_country or '' }}">
+                    <label for="participant_country">País de residencia *</label>
+                  </div>
+                </div>
+                
+                <div class="mb-3">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="participant_city" name="participant_city" required 
+                           placeholder="Ciudad de residencia" value="{{ datos.participant_city or '' }}">
+                    <label for="participant_city">Ciudad de residencia *</label>
+                  </div>
+                </div>
+                
+                <div class="mb-3">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="participant_occupation" name="participant_occupation" required 
+                           placeholder="Ocupación actual" value="{{ datos.participant_occupation or '' }}">
+                    <label for="participant_occupation">Ocupación actual *</label>
+                  </div>
+                </div>
+                
+                <div class="mb-3">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="participant_institution" name="participant_institution" 
+                           placeholder="Institución donde estudia o trabaja" value="{{ datos.participant_institution or '' }}">
+                    <label for="participant_institution">Institución donde estudia o trabaja</label>
+                  </div>
+                </div>
+                
+                <div class="mb-3">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="participant_area" name="participant_area" required 
+                           placeholder="Área de conocimiento o especialización" value="{{ datos.participant_area or '' }}">
+                    <label for="participant_area">Área de conocimiento o especialización *</label>
+                  </div>
+                </div>
+                
+                <div class="mb-3">
+                  <div class="form-floating">
+                    <input type="url" class="form-control" id="participant_portfolio" name="participant_portfolio" 
+                           placeholder="Enlace a portfolio o trabajo previo" value="{{ datos.participant_portfolio or '' }}">
+                    <label for="participant_portfolio">Enlace a portfolio o trabajo previo</label>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Sección 2: alineada arriba -->
+              <div class="form-step position-absolute top-0 start-0 w-100 d-none">
+                <div class="mb-3 section-top-space">
+                  <label for="category" class="form-label">Categoría en la que participa *</label>
+                  <select class="form-select" id="category" name="category" required>
+                    <option value="" disabled {% if not datos.category %}selected{% endif %}>Seleccione una categoría</option>
+                    <option value="artes plásticas" {% if datos.category == 'artes plásticas' %}selected{% endif %}>Artes plásticas</option>
+                    <option value="instalaciones" {% if datos.category == 'instalaciones' %}selected{% endif %}>Instalaciones</option>
+                    <option value="artes performativas" {% if datos.category == 'artes performativas' %}selected{% endif %}>Artes performativas</option>
+                    <option value="montaje científico" {% if datos.category == 'montaje científico' %}selected{% endif %}>Montaje científico</option>
+                    <option value="audiovisual" {% if datos.category == 'audiovisual' %}selected{% endif %}>Audiovisual</option>
+                    <option value="danza" {% if datos.category == 'danza' %}selected{% endif %}>Danza</option>
+                    <option value="literatura" {% if datos.category == 'literatura' %}selected{% endif %}>Literatura</option>
+                  </select>
+                </div>
+
+                <div class="mb-3">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="title" name="title" required 
+                           placeholder="Título de la propuesta o trabajo" value="{{ datos.title or '' }}">
+                    <label for="title">Título de la propuesta o trabajo *</label>
+                  </div>
+                </div>
+
+                <div class="form-floating mb-3">
+                  <textarea class="form-control" id="description" name="description"
+                            style="height: 120px" required placeholder="Breve descripción del proyecto">{{ datos.description or '' }}</textarea>
+                  <label for="description" class="d-none d-sm-block">Breve descripción del proyecto (máx. 300 palabras) *</label>
+                  <label for="description" class="d-block d-sm-none">Descripción breve *</label>
+                </div>
+
+                <div class="mb-3">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="format" name="format" required 
+                           placeholder="Formato o técnica utilizada" value="{{ datos.format or '' }}">
+                    <label for="format">Formato o técnica utilizada *</label>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="project_files" class="form-label">
+                    Archivos adjuntos (imágenes, documentos o videos) <span class="text-muted">(opcional)</span>
+                  </label>
+                  <input
+                    type="file"
+                    class="form-control"
+                    id="project_files"
+                    name="project_files"
+                    multiple
+                    accept="image/*,video/*,.pdf,.doc,.docx">
+                  {% if datos.project_files %}
+                    <div class="mt-2 p-2 bg-light rounded" id="file-info-block">
+                      <small class="text-success">
+                        <i class="fas fa-check-circle me-1"></i>
+                        <strong>Archivos cargados:</strong> {{ datos.project_files }}
+                      </small>
+                    </div>
+                  {% else %}
+                    <small class="form-text text-muted">
+                      Seleccione uno o más archivos (imágenes, videos, documentos PDF)
+                    </small>
+                  {% endif %}
+                </div>
+              </div>
+              
+              <!-- Sección 3: alineada arriba -->
+              <div class="form-step position-absolute top-0 start-0 w-100 d-none">
+                <div class="mb-3 section-top-space">
+                  <label class="form-label">¿Ha participado en ediciones anteriores?</label>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="previous_participation" id="participation_yes" value="Sí"
+                      {% if datos.previous_participation == 'Sí' %}checked{% endif %}>
+                    <label class="form-check-label" for="participation_yes">
+                      Sí, he participado anteriormente
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="previous_participation" id="participation_no" value="No"
+                      {% if datos.previous_participation == 'No' %}checked{% endif %}>
+                    <label class="form-check-label" for="participation_no">
+                      No, es mi primera participación
+                    </label>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">¿Autoriza la difusión de su trabajo en redes sociales y medios de comunicación?</label>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="media_authorization" id="media_yes" value="Sí" required
+                      {% if datos.media_authorization == 'Sí' %}checked{% endif %}>
+                    <label class="form-check-label" for="media_yes">
+                      Sí, autorizo la difusión
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="media_authorization" id="media_no" value="No" required
+                      {% if datos.media_authorization == 'No' %}checked{% endif %}>
+                    <label class="form-check-label" for="media_no">
+                      No autorizo la difusión
+                    </label>
+                  </div>
+                </div>
+
+                <div class="mb-3 mt-4">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="terms" name="terms" required
+                      {% if datos.terms %}checked{% endif %}>
+                    <label class="form-check-label" for="terms">
+                      He leído y acepto los <a href="{{ url_for('admin.terminos') }}" target="_blank">términos y condiciones</a> *
+                    </label>
+                  </div>
+                </div>
+
+                <!-- BLOQUE DEL BOTÓN ELIMINADO
+                <div class="text-center">
+                  <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="fas fa-paper-plane me-2"></i>
+                    Enviar solicitud
+                  </button>
+                </div>
+                -->
+              </div>
+
+            </form>
+          </div>
+
+        </div> <!-- .card-body -->
       </div>
     </div>
   </div>

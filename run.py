@@ -4,6 +4,7 @@ from app.register import register_bp
 from app.admin import admin_bp
 from config import Config
 from flask_mail import Mail, Message
+import os
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -22,6 +23,13 @@ mail = Mail(app)
 app.register_blueprint(auth_bp, url_prefix='/')
 app.register_blueprint(register_bp, url_prefix='/')
 app.register_blueprint(admin_bp)
+
+# Configura el directorio de uploads
+UPLOAD_FOLDER = os.path.join(os.getcwd(), 'uploads')
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# Crea el directorio si no existe
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # AGREGAR ESTAS RUTAS:
 

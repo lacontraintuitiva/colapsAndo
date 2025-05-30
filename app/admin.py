@@ -1,10 +1,61 @@
-from flask import request, jsonify, session
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session, jsonify
+from flask import (
+    Blueprint, render_template, request, redirect, url_for,
+    flash, session, jsonify, current_app
+)
+from werkzeug.utils import secure_filename
 from db import get_db_connection
 import os
-from werkzeug.utils import secure_filename
 
 admin_bp = Blueprint('admin', __name__)
+
+
+def get_or_create_draft(user_id):
+    print(f"--- Iniciando get_or_create_draft para user_id: {user_id} ---")
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    # Buscar draft existente
+    print("Buscando draft existente...")
+    cur.execute("""
+      SELECT * FROM projects
+       WHERE user_id = %s AND status = 'draft'
+       ORDER BY updated_at DESC
+       LIMIT 1
+    """, (user_id,))
+    row = cur.fetchone()
+    print(f"Resultado de SELECT (row): {row}")
+
+    if row:
+        print("Draft existente encontrado.")
+        # Si 'row' ya es un RealDictRow, se comporta como un diccionario
+        project = dict(row)
+        print(f"Project (desde SELECT, convertido de RealDictRow): {project}")
+    else:
+        print("No se encontró draft existente. Creando nuevo draft...")
+        cur.execute("""
+          INSERT INTO projects
+            (user_id, status, current_step, created_at, updated_at)
+          VALUES (%s,'draft',0,NOW(),NOW())
+          RETURNING *
+        """, (user_id,))
+        new_row = cur.fetchone()  # Esto también devolverá un RealDictRow
+        print(f"Resultado de INSERT RETURNING * (new_row): {new_row}")
+
+        if new_row:
+            project = dict(new_row)  # Convertir RealDictRow a dict
+            print(
+                f"Project (desde INSERT, convertido de RealDictRow): {project}")
+        else:
+            project = {}
+            print("ERROR CRÍTICO: INSERT no retornó fila (new_row es None).")
+
+    print(f"Antes de commit. Project['id'] es: {project.get('id')}")
+    conn.commit()
+    cur.close()
+    conn.close()
+    print(
+        f"--- Finalizando get_or_create_draft. Retornando project con id: {project.get('id')} ---")
+    return project
 
 
 @admin_bp.route('/admin')
@@ -14,9 +65,9 @@ def admin_panel():
         return redirect(url_for('auth.login'))
 
     conn = get_db_connection()
-    c = conn.cursor()
-    c.execute("SELECT * FROM users")
-    users = c.fetchall()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM users")
+    users = cur.fetchall()
     conn.close()
 
     return render_template('admin.html', users=users)
@@ -25,22 +76,25 @@ def admin_panel():
 @admin_bp.route('/edit-user/<int:user_id>', methods=['GET', 'POST'])
 def edit_user(user_id):
     if 'user_id' not in session or session.get('role') != 'admin':
+        flash("Debes ser administrador para editar usuarios.", "warning")
         return redirect(url_for('auth.login'))
 
     conn = get_db_connection()
-    c = conn.cursor()
+    cur = conn.cursor()
 
     if request.method == 'POST':
-        new_role = request.form['role']
-        new_status = request.form['status']
-        c.execute("UPDATE users SET role = %s, status = %s WHERE id = %s",
-                  (new_role, new_status, user_id))
+        new_role = request.form.get('role')
+        new_status = request.form.get('status')
+        cur.execute(
+            "UPDATE users SET role = %s, status = %s WHERE id = %s",
+            (new_role, new_status, user_id)
+        )
         conn.commit()
         conn.close()
         return redirect(url_for('admin.admin_panel'))
 
-    c.execute("SELECT * FROM users WHERE id = %s", (user_id,))
-    user = c.fetchone()
+    cur.execute("SELECT * FROM users WHERE id = %s", (user_id,))
+    user = cur.fetchone()
     conn.close()
     return render_template('edit_user.html', user=user)
 
@@ -48,10 +102,12 @@ def edit_user(user_id):
 @admin_bp.route('/delete-user/<int:user_id>', methods=['POST'])
 def delete_user(user_id):
     if session.get('role') != 'admin':
+        flash("Debes ser administrador para eliminar usuarios.", "warning")
         return redirect(url_for('auth.login'))
+
     conn = get_db_connection()
-    c = conn.cursor()
-    c.execute("DELETE FROM users WHERE id = %s", (user_id,))
+    cur = conn.cursor()
+    cur.execute("DELETE FROM users WHERE id = %s", (user_id,))
     conn.commit()
     conn.close()
     return redirect(url_for('admin.admin_panel'))
@@ -59,268 +115,167 @@ def delete_user(user_id):
 
 @admin_bp.route('/project/register', methods=['GET', 'POST'])
 def register_project():
-    # Verificación de autenticación más robusta
     if 'user_id' not in session:
         flash("Debes iniciar sesión para registrar un proyecto.", "warning")
         return redirect(url_for('auth.login'))
 
-    # Inicializa datos como diccionario vacío
     datos = {}
+    conn = None
 
-    # Intenta cargar datos existentes
     try:
         conn = get_db_connection()
         cur = conn.cursor()
-
         cur.execute("""
-            SELECT * FROM projects 
-            WHERE user_id = %s AND status = 'draft'
-            ORDER BY updated_at DESC LIMIT 1
+            SELECT * FROM projects
+             WHERE user_id = %s AND status = 'draft'
+             ORDER BY updated_at DESC
+             LIMIT 1
         """, (session['user_id'],))
-
-        project = cur.fetchone()
-
-        # Convierte a diccionario si es necesario
-        if project and not isinstance(project, dict):
-            colnames = [desc[0] for desc in cur.description]
-            project = dict(zip(colnames, project))
-
-        # Si hay datos, mapearlos correctamente al formulario
-        if project:
-            # MAPEO INVERSO: de base de datos a formulario
-            reverse_mapping = {
-                'title': 'project_title',
-                'description': 'project_description', 
-                'category': 'project_category'
-            }
-            
-            # Aplicar mapeo inverso
-            for db_field, form_field in reverse_mapping.items():
-                if db_field in project and project[db_field]:
-                    project[form_field] = project[db_field]
-            
-            datos = project
-
+        row = cur.fetchone()
+        cols = [d[0] for d in cur.description]
+        if row:
+            datos = dict(zip(cols, row))
     except Exception as e:
-        print(f"Error cargando datos: {e}")
-        # No redirigir aquí, solo loggear el error
+        print("Error cargando borrador:", e)
     finally:
         if conn:
             cur.close()
             conn.close()
 
     if request.method == 'POST':
-        conn = None
-        try:
-            conn = get_db_connection()
-            cur = conn.cursor()
-            title = request.form['project_name']
-            description = request.form.get('description', '')
-            category = request.form['project_type']
+        title = request.form.get('title')
+        description = request.form.get('description')
+        category = request.form.get('category')
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO projects (title, description, category, user_id) "
+            "VALUES (%s, %s, %s, %s) RETURNING id",
+            (title, description, category, session['user_id'])
+        )
+        project_id = cur.fetchone()[0]
+        conn.commit()
+        cur.close()
+        conn.close()
+        flash('Proyecto registrado exitosamente.', 'success')
+        return redirect(url_for('admin.view_project', id=project_id))
 
-            cur.execute(
-                "INSERT INTO projects (title, description, category, user_id) VALUES (%s, %s, %s, %s) RETURNING id",
-                (title, description, category, session['user_id'])
-            )
-            project_id = cur.fetchone()['id']
-            conn.commit()
-            cur.close()
-            flash('Proyecto registrado exitosamente.', 'success')
-            return redirect(url_for('admin.view_project', id=project_id))
-        except Exception as e:
-            if conn:
-                conn.rollback()
-            flash('Error al registrar el proyecto.', 'danger')
-        finally:
-            if conn:
-                conn.close()
-
-    # Agregar debug para ver qué datos se están pasando
-    print(f"Datos enviados al template: {datos}")
-    
-    # ESTO ES LO CLAVE: pasar datos al template
     return render_template('project_form.html', datos=datos)
 
 
-@admin_bp.route('/project/autosave', methods=['POST'])
+@admin_bp.route('/admin/project/autosave', methods=['POST'])
 def autosave_project():
     if 'user_id' not in session:
-        return jsonify({'error': 'No autorizado'}), 401
+        return jsonify(error='No autorizado para autosave'), 401
 
     try:
-        conn = get_db_connection()
-        cur = conn.cursor()
+        user_id = session['user_id']
+        project = get_or_create_draft(user_id)
+        pid = project.get('id')
+        if not pid:
+            print("ERROR: No se pudo obtener el ID del proyecto.")
+            return jsonify({'error': 'No se pudo obtener el ID del proyecto'}), 500
 
-        # Mapear campos del formulario a columnas de la base de datos
-        field_mapping = {
-            'project_title': 'title',
-            'project_description': 'description',
-            'project_category': 'category'
+        form_data = request.form.to_dict()
+        print("DEBUG autosave_project: request.form =", form_data)
+
+        # Mapea todos los campos relevantes
+        fields_to_save = {
+            'title': form_data.get('title'),
+            'description': form_data.get('description'),
+            'category': form_data.get('category'),
+            'participant_name': form_data.get('participant_name'),
+            'participant_phone': form_data.get('participant_phone'),
+            'participant_country': form_data.get('participant_country'),
+            'participant_city': form_data.get('participant_city'),
+            'participant_occupation': form_data.get('participant_occupation'),
+            'participant_institution': form_data.get('participant_institution'),
+            'participant_area': form_data.get('participant_area'),
+            'participant_portfolio': form_data.get('participant_portfolio'),
+            'previous_participation': form_data.get('previous_participation'),
+            'media_authorization': form_data.get('media_authorization'),
+            'terms': True if form_data.get('terms') == 'on' else False,
+            'current_step': form_data.get('current_step', 0),
+            'format': form_data.get('format'),
+            # project_files se maneja aparte si subes archivos
         }
 
-        # Procesar campos del formulario
-        form_data = {}
-        
-        # Campos con mapeo especial
-        for form_field, db_field in field_mapping.items():
-            if form_field in request.form and request.form[form_field].strip():
-                form_data[db_field] = request.form[form_field]
+        remove_file = form_data.get('remove_project_files') == '1'
+        if remove_file:
+            fields_to_save['project_files'] = None  # O '' según tu lógica
 
-        # Campos que coinciden directamente
-        direct_fields = [
-            'participant_name', 'participant_phone', 'participant_country',
-            'participant_city', 'participant_occupation', 'participant_institution',
-            'participant_area', 'participant_portfolio', 'project_justification',
-            'project_format', 'previous_participation', 'media_authorization'
-        ]
-        
-        for field in direct_fields:
-            if field in request.form and request.form[field].strip():
-                form_data[field] = request.form[field]
+        print("DEBUG autosave_project: Campos y valores a guardar en DB:", fields_to_save)
 
-        # Procesar checkbox terms
-        if 'terms' in request.form:
-            form_data['terms'] = True
+        set_clauses = []
+        values = []
+        for col, val in fields_to_save.items():
+            set_clauses.append(f"{col} = %s")
+            values.append(val)
+        set_clauses.append("updated_at = NOW()")
 
-        # MANEJAR ARCHIVOS
-        uploaded_files = []
-        if 'project_files' in request.files:
-            files = request.files.getlist('project_files')
-            for file in files:
-                if file and file.filename:
-                    filename = secure_filename(file.filename)
-                    # Crear directorio si no existe
-                    upload_dir = f"uploads/user_{session['user_id']}"
-                    os.makedirs(upload_dir, exist_ok=True)
-                    
-                    # Guardar archivo
-                    file_path = os.path.join(upload_dir, filename)
-                    file.save(file_path)
-                    uploaded_files.append(filename)
-            
-            # Si hay archivos, agregarlos a form_data
-            if uploaded_files:
-                form_data['project_files'] = ', '.join(uploaded_files)
+        sql = f"UPDATE projects SET {', '.join(set_clauses)} WHERE id = %s"
+        values.append(pid)
 
-        current_step = request.form.get('current_step', type=int)
+        print("DEBUG autosave_project: SQL UPDATE:", sql)
+        print("DEBUG autosave_project: Values para UPDATE:", values)
 
-        # Verificar si existe proyecto draft
-        cur.execute("""
-            SELECT id, project_files FROM projects 
-            WHERE user_id = %s AND status = 'draft'
-            ORDER BY updated_at DESC LIMIT 1
-        """, (session['user_id'],))
-        
-        existing = cur.fetchone()
-
-        if existing and form_data:
-            # UPDATE - mantener archivos existentes si no se subieron nuevos
-            if 'project_files' not in form_data and existing.get('project_files'):
-                form_data['project_files'] = existing['project_files']
-                
-            update_fields = ', '.join([f"{field} = %s" for field in form_data.keys()])
-            values = list(form_data.values())
-            
-            sql_update = f"""
-                UPDATE projects SET 
-                {update_fields}, 
-                updated_at = CURRENT_TIMESTAMP
-                {', current_step = %s' if current_step is not None else ''}
-                WHERE user_id = %s
-            """
-            
-            if current_step is not None:
-                values.append(current_step)
-            values.append(session['user_id'])
-            
-            cur.execute(sql_update, values)
-            project_id = existing['id']
-            
-        elif not existing and form_data:
-            # INSERT
-            fields = list(form_data.keys())
-            values = list(form_data.values())
-            
-            sql_insert = f"""
-                INSERT INTO projects (
-                    user_id, {', '.join(fields)}, status, updated_at
-                    {', current_step' if current_step is not None else ''}
-                ) VALUES (
-                    %s, {', '.join(['%s']*len(fields))}, 'draft', CURRENT_TIMESTAMP
-                    {', %s' if current_step is not None else ''}
-                ) RETURNING id
-            """
-
-            params = [session['user_id']] + values
-            if current_step is not None:
-                params.append(current_step)
-
-            cur.execute(sql_insert, params)
-            result = cur.fetchone()
-            project_id = result['id']
-        else:
-            project_id = existing['id'] if existing else None
-
-        conn.commit()
-        
-        # Verificar si hay archivos para informar al frontend
-        has_files = bool(form_data.get('project_files') or (existing and existing.get('project_files')))
-        
-        return jsonify({
-            'success': True, 
-            'project_id': project_id,
-            'has_files': has_files
-        })
-
-    except Exception as e:
-        print(f"Error en autosave: {e}")
-        if conn:
-            conn.rollback()
-        return jsonify({'error': str(e)}), 500
-    finally:
-        if conn:
-            cur.close()
-            conn.close()
-
-
-@admin_bp.route('/project/load-progress')
-def load_project_progress():
-    if 'user_id' not in session:
-        return jsonify({'error': 'No autorizado'}), 401
-
-    try:
         conn = get_db_connection()
         cur = conn.cursor()
+        cur.execute(sql, values)
+        conn.commit()
 
-        cur.execute("""
-            SELECT * FROM projects 
-            WHERE user_id = %s AND status = 'draft'
-            ORDER BY updated_at DESC LIMIT 1
-        """, (session['user_id'],))
+        cur.execute("SELECT * FROM projects WHERE id = %s", (pid,))
+        print("DEBUG autosave_project: datos en DB después del commit:", cur.fetchone())
+        cur.close()
+        conn.close()
 
-        project = cur.fetchone()
-
-        # Si usas RealDictCursor, project ya es un dict
-        # Si no, conviértelo:
-        if project and not isinstance(project, dict):
-            colnames = [desc[0] for desc in cur.description]
-            project = dict(zip(colnames, project))
-
-        return jsonify({
-            'success': True,
-            'project': project if project else None
-        })
-
+        return jsonify(success=True)
     except Exception as e:
-        print(f"Error cargando progreso: {e}")
+        import traceback
+        print("Error en autosave_project:", e)
+        traceback.print_exc()
         return jsonify({'error': str(e)}), 500
-    finally:
-        if conn:
-            cur.close()
-            conn.close()
 
-    print(f"Session: {session}")
-    print(f"User ID: {session.get('user_id')}")
+
+@admin_bp.route('/project/load-progress', endpoint='project_load_progress')
+def load_project_progress():
+    if 'user_id' not in session:
+        return jsonify(error='No autorizado'), 401
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT 
+            id, user_id, status, created_at, updated_at, -- Metadatos
+            participant_name, participant_phone, participant_country, participant_city,
+            participant_occupation, participant_institution, participant_area,
+            participant_portfolio,
+            title, description, category, format, project_files,
+            previous_participation, current_step,
+            media_authorization, terms
+        FROM projects
+        WHERE user_id = %s AND status = 'draft'
+        ORDER BY updated_at DESC
+        LIMIT 1
+    """, (session['user_id'],))
+    row = cur.fetchone()  # row es un RealDictRow
+
+    if not row:
+        cur.close()
+        conn.close()
+        # <--- ASEGÚRATE QUE ESTA LÍNEA ESTÉ AQUÍ
+        print(f"DEBUG load_project_progress: Enviando project: {project}")
+
+        return jsonify(success=True, project={})
+
+    project = dict(row)  # Convertir RealDictRow a dict estándar
+
+    cur.close()
+    conn.close()
+
+    # Revisa este print en la consola de Flask
+    print(f"DEBUG load_project_progress: Enviando project: {project}")
+    return jsonify(success=True, project=project)
 
 
 @admin_bp.route('/terminos')

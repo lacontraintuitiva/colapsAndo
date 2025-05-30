@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Usa este bloque para el contenedor principal de cada página -->
+<div class="container-fluid d-flex justify-content-center align-items-center" style="height: calc(100vh - 200px);">
+    <div class="row w-100 justify-content-center">
+        <div class="col-11 col-sm-8 col-md-6 col-lg-4">
+            <div class="card shadow-sm card-index">
+                <div class="card-body text-center">
+                    <p class="mb-4 bienvenida-index fs-2">
+                        Bienvenidx al sistema de registro de proyectos del Festival <span class="colapsando">colapsAndo</span>.
+                    </p>
+                </div>
+                <div class="card-footer text-center" style="background-color: #ffffff; border-top: 1px solid #e9ecef;">
+                    <small style="color: #6c757d; font-weight: 100;">
+                        ¿Ya tienes cuenta? 
+                        <a href="{{ url_for('auth.login') }}" class="text-decoration-none" 
+                           style="color: #8da08f; font-weight: 200;">
+                            Ingresa
+                        </a>. 
+                        ¿Eres nuevo? 
+                        <a href="{{ url_for('register.register') }}" class="text-decoration-none" 
+                           style="color: #7c8798; font-weight: 200;">
+                            Regístrate
+                        </a>.
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      {% if message != 'Sesión cerrada.' %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+{% endblock %}

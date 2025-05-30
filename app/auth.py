@@ -188,11 +188,15 @@ def account():
     if 'user_id' not in session:
         return redirect(url_for('auth.login'))
 
+    # Eliminar solo el mensaje específico de inicio de sesión exitoso
+    if '_flashes' in session:
+        session['_flashes'] = [(cat, msg) for cat, msg in session['_flashes']
+                               if msg != 'Inicio de sesión exitoso.']
+
     # Obtener información del usuario desde la base de datos
     conn = get_db_connection()
     cur = conn.cursor()
 
-    # CORREGIR: usar 'name' en lugar de 'username'
     cur.execute("SELECT name, email FROM users WHERE id = %s",
                 (session['user_id'],))
     user_data = cur.fetchone()
@@ -207,7 +211,6 @@ def account():
     cur.close()
     conn.close()
 
-    # PASAR user_info al template
     return render_template('account.html', user_info=user_info)
 
 
