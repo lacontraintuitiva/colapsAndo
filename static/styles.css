@@ -152,14 +152,17 @@ html, body {
 
 /* Mensajes flash: rosa mexicano oscuro */
 .alert-danger,
-.alert-warning,
-.alert-info,
-.alert-success {
+.alert-warning {
     background-color: #c2185b !important; /* Rosa mexicano oscuro */
     color: #fff !important;
     border: none !important;
-    font-weight: 300;
-    letter-spacing: 0.5px;
+}
+
+/* Mensajes de éxito: verde Bootstrap */
+.alert-success {
+    background-color: #198754 !important; /* Bootstrap green */
+    color: #fff !important;
+    border: none !important;
 }
 
 .alert-info {

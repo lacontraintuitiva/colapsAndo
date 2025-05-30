@@ -41,7 +41,8 @@ def register():
             )
             conn.commit()
             cur.close()
-            flash("Registro exitoso. Por favor revisa tu correo para activar tu cuenta.", "success")
+            flash(
+                "Registro exitoso. Por favor revisa tu correo para activar tu cuenta.", "success")
             return redirect(url_for('auth.login'))
         except IntegrityError:
             if conn:
