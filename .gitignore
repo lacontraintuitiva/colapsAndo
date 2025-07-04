@@ -2,3 +2,14 @@
 *.pyc
 __pycache__/
 venv/
+.vscode/settings.json
+*.db
+*.log
+.DS_Store
+node_modules/
+dist/
+build/
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
