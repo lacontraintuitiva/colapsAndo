@@ -1,0 +1,29 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "python.defaultInterpreterPath": "./venv/bin/python",
+        "python.envFile": "${workspaceFolder}/.env",
+        "files.exclude": {
+            "**/__pycache__": true,
+            "**/*.pyc": true,
+            "**/venv": true,
+            "**/.git": true,
+            "**/.DS_Store": true,
+            "**/uploads": true
+        }
+    },
+    "extensions": {
+        "recommendations": [
+            "ms-python.python",
+            "ms-python.flake8",
+            "ms-python.black-formatter",
+            "samuelcolvin.jinjahtml",
+            "mtxr.sqltools",
+            "mtxr.sqltools-driver-pg"
+        ]
+    }
+}
